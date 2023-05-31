@@ -13,6 +13,9 @@ class HomeController extends GetxController {
   Map<String, dynamic> mapUser = {};
   Dio dio = Dio();
 
+  // ${"ANDRIAN WAHYU".split(' ').join('+')}
+  String defaultImage = "https://ui-avatars.com/api/?name=Andrian+Wahyu";
+
   Future<Map<String, dynamic>> getUser() async {
     prefs = await SharedPreferences.getInstance();
     String? user = prefs.getString('user');

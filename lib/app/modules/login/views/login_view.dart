@@ -18,7 +18,9 @@ class LoginView extends GetView<LoginController> {
           child: ListView(
             padding: EdgeInsets.symmetric(horizontal: 28.w),
             children: [
-              SizedBox(height: 128.h),
+              SizedBox(height: 40.h),
+              Image.asset("assets/images/ic_bapenda.png"),
+              SizedBox(height: 20.h),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -39,9 +41,14 @@ class LoginView extends GetView<LoginController> {
                   ),
                 ],
               ),
-              SizedBox(height: 70.h),
-              Image.asset("assets/images/ic_bapenda.png"),
-              SizedBox(height: 64.h),
+              SizedBox(height: 30.h),
+              Image.asset(
+                "assets/images/img_login.png",
+                fit: BoxFit.contain,
+                width: 176.w,
+                height: 201.h,
+              ),
+              SizedBox(height: 30.h),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
