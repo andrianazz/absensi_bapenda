@@ -27,17 +27,22 @@ class HomeView extends GetView<HomeController> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "ANDRIAN WAHYU",
-                      style: poppins.copyWith(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
+                    Obx(
+                      () => Text(
+                        controller.userModel.value.nama ?? "Tidak Ada Nama",
+                        style: poppins.copyWith(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                    Text(
-                      "Pengendalian Pajak Daerah",
-                      style: poppins.copyWith(
-                        fontSize: 14.sp,
+                    Obx(
+                      () => Text(
+                        controller.userModel.value.unitKerja?.namaUnitKerja ??
+                            "Tidak Ada Unit",
+                        style: poppins.copyWith(
+                          fontSize: 14.sp,
+                        ),
                       ),
                     ),
                   ],
@@ -51,14 +56,16 @@ class HomeView extends GetView<HomeController> {
                     onTap: () async {
                       await controller.logout();
                     },
-                    child: ClipOval(
-                      child: SizedBox(
-                        height: 60,
-                        width: 60,
-                        child: Center(
-                          child: Image.network(
-                            "https://ui-avatars.com/api/?name=Andrian+Wahyu&background=0D8ABC&bold=true&color=fff&rounded=true",
-                            fit: BoxFit.fill,
+                    child: Obx(
+                      () => ClipOval(
+                        child: SizedBox(
+                          height: 60,
+                          width: 60,
+                          child: Center(
+                            child: Image.network(
+                              controller.defaultImage.value,
+                              fit: BoxFit.fill,
+                            ),
                           ),
                         ),
                       ),
@@ -191,12 +198,24 @@ class HomeView extends GetView<HomeController> {
               color: const Color(0xffE4E4E4),
             ),
             SizedBox(height: 20.h),
-            Text(
-              "Riwayat Absen",
-              style: poppins.copyWith(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Riwayat Absen",
+                  style: poppins.copyWith(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  "Last 2 days",
+                  style: poppins.copyWith(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
             ),
             SizedBox(height: 10.h),
             Card(
