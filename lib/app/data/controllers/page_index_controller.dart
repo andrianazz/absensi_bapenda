@@ -1,9 +1,26 @@
+import 'package:absensi_bapenda/app/data/controllers/masuk_controller.dart';
+import 'package:absensi_bapenda/app/data/controllers/pulang_controller.dart';
+import 'package:absensi_bapenda/app/data/controllers/siang1_controller.dart';
+import 'package:absensi_bapenda/app/data/controllers/siang2.controller.dart';
+import 'package:absensi_bapenda/app/data/models/masuk_model.dart';
+import 'package:absensi_bapenda/app/data/models/pulang_model.dart';
+import 'package:absensi_bapenda/app/data/models/siang1_model.dart';
+import 'package:absensi_bapenda/app/data/models/siang2_model.dart';
+import 'package:absensi_bapenda/app/modules/home/controllers/home_controller.dart';
+import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:absensi_bapenda/app/routes/app_pages.dart';
 
 class PageIndexController extends GetxController {
+  MasukController masukC = Get.put(MasukController());
+  Siang1Controller siang1C = Get.put(Siang1Controller());
+  Siang2Controller siang2C = Get.put(Siang2Controller());
+  PulangController pulangC = Get.put(PulangController());
+
+  HomeController homeC = Get.put(HomeController());
+
   RxInt pageIndex = 0.obs;
 
   // FirebaseAuth auth = FirebaseAuth.instance;
@@ -19,19 +36,87 @@ class PageIndexController extends GetxController {
       case 1:
         pageIndex.value = 1;
 
-        Map<String, dynamic> dataResponse = await _determinePosition();
-        Position position = dataResponse['position'];
-
-        if (dataResponse['error'] == true) {
-          Get.snackbar("Terjadi Kesalahan", dataResponse['message']);
+        if (isTimeInRangeNotPagi()) {
+          Get.dialog(
+            AlertDialog(
+              title: const Text("Peringatan"),
+              content: const Text(
+                  "Absen Masuk dibuka dari jam 05:00 - 08:00, Silahkan melakukan absen pada waktu yang telah ditentukan"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: const Text("OK"),
+                ),
+              ],
+            ),
+          );
+        } else if (isTimeInRangeNotSiang1()) {
+          Get.dialog(
+            AlertDialog(
+              title: const Text("Peringatan"),
+              content: const Text(
+                  "Absen Siang 1 dibuka dari jam 11:30 - 12:00, Silahkan melakukan absen pada waktu yang telah ditentukan"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: const Text("OK"),
+                ),
+              ],
+            ),
+          );
+        } else if (isTimeInRangeNotSiang2()) {
+          Get.dialog(
+            AlertDialog(
+              title: const Text("Peringatan"),
+              content: const Text(
+                  "Absen Siang 2 dibuka dari jam 14:00 - 13:00, Silahkan melakukan absen pada waktu yang telah ditentukan"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: const Text("OK"),
+                ),
+              ],
+            ),
+          );
+        } else if (isTimeInRangeNotPulang()) {
+          Get.dialog(
+            AlertDialog(
+              title: const Text("Peringatan"),
+              content: const Text(
+                  "Absen Pulang dibuka dari jam 16:00 - 23:59, Silahkan melakukan absen pada waktu yang telah ditentukan"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: const Text("OK"),
+                ),
+              ],
+            ),
+          );
         } else {
-          List<Placemark> placemarks = await placemarkFromCoordinates(
-              position.latitude, position.longitude);
+          Map<String, dynamic> dataResponse = await _determinePosition();
+          Position position = dataResponse['position'];
 
-          String address =
-              "${placemarks[0].name}, ${placemarks[0].subLocality}, ${placemarks[0].locality}";
-          await updatePosition(position, address);
-          await presence(position, address);
+          if (dataResponse['error'] == true) {
+            Get.snackbar("Terjadi Kesalahan", dataResponse['message']);
+          } else {
+            List<Placemark> placemarks = await GeocodingPlatform.instance
+                .placemarkFromCoordinates(position.latitude, position.longitude,
+                    localeIdentifier: "id_ID");
+
+            String address =
+                "${placemarks[placemarks.length - 1].street}, ${placemarks[placemarks.length - 1].subLocality}, ${placemarks[placemarks.length - 1].locality}";
+
+            await updatePosition(position, address);
+            await presence(position, address);
+          }
         }
 
         break;
@@ -47,145 +132,207 @@ class PageIndexController extends GetxController {
   }
 
   Future<void> updatePosition(Position position, String address) async {
-    // String uid = auth.currentUser!.uid;
-    // await firestore.collection('pegawai').doc(uid).update(
-    //   {
-    //     'position': {
-    //       'latitude': position.latitude,
-    //       'longitude': position.longitude,
-    //     },
-    //     'address': address,
-    //   },
-    // );
+    print("updatePosition: $position");
+    print("address: $address");
   }
 
   Future<void> presence(Position position, String address) async {
-    // String uid = auth.currentUser!.uid;
-    // String now = DateFormat.yMd().format(DateTime.now()).replaceAll("/", "-");
+    int uid = homeC.userModel.value.id!;
+    String now = DateTime.now().toString().split(' ')[0];
 
-    // CollectionReference<Map<String, dynamic>> presenceRef =
-    //     firestore.collection('pegawai').doc(uid).collection("presence");
+    double distanceBapenda = Geolocator.distanceBetween(
+        position.latitude, position.longitude, 0.523141, 101.440834);
 
-    // QuerySnapshot<Map<String, dynamic>> snapshot = await presenceRef.get();
+    String status = "Di Luar Area";
 
-    // double distanceInMeters = Geolocator.distanceBetween(position.latitude,
-    //     position.longitude, 0.5477153324473172, 101.42622971181308);
+    if (distanceBapenda <= 100) {
+      status = "Di dalam Area";
 
-    // String status = "Di Luar Area";
+      print(distanceBapenda.toInt());
+      print(status);
+    }
 
-    // if (distanceInMeters <= 200) {
-    //   status = "Di dalam Area";
-    // }
+    Masuk masuk = await masukC.getMasukToday();
+    Siang1 siang1 = await siang1C.getSiang1Today();
+    Siang2 siang2 = await siang2C.getSiang2Today();
+    Pulang pulang = await pulangC.getPulangToday();
 
-    // if (snapshot.docs.isEmpty) {
-    //   //Eksekusi Masuk
-    //   await Get.defaultDialog(
-    //     title: "Validasi Absen",
-    //     middleText: "APAKAH ANDA YAKIN INGIN MELAKUKAN ABSEN MASUK HARI INI?",
-    //     actions: [
-    //       OutlinedButton(
-    //         onPressed: () => Get.back(),
-    //         child: const Text("CANCEL"),
-    //       ),
-    //       ElevatedButton(
-    //           onPressed: () async {
-    //             await presenceRef.doc(now).set(
-    //               {
-    //                 'date': DateTime.now().toIso8601String(),
-    //                 'masuk': {
-    //                   'date': DateTime.now().toIso8601String(),
-    //                   'latitude': "${position.latitude}",
-    //                   'longitude': "${position.longitude}",
-    //                   'distance': distanceInMeters,
-    //                   'address': address,
-    //                   'status': status,
-    //                 }
-    //               },
-    //             );
+    if (isTimeInRangePagi()) {
+      print("pagi");
+      if (masuk.id == null) {
+        Get.dialog(
+          AlertDialog(
+            title: const Text("ABSEN MASUK"),
+            content: const Text("Apakah anda ingin melakukan absen masuk"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text("Tidak"),
+              ),
+              TextButton(
+                onPressed: () async {
+                  await masukC.postMasuk(
+                    position,
+                    distanceBapenda.toInt(),
+                    status,
+                  );
+                },
+                child: const Text("Absen"),
+              ),
+            ],
+          ),
+        );
+      } else {
+        Get.dialog(AlertDialog(
+          title: const Text("Peringatan"),
+          content: const Text("Anda sudah melakukan absen masuk"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        ));
+      }
+    } else if (isTimeInRangeSiang1()) {
+      print("Siang1");
 
-    //             Get.back();
+      if (masuk.id == null) {
+        // await masukC.postMasuk(position, status);
+        Get.dialog(
+          AlertDialog(
+            title: const Text("ABSEN SIANG 1"),
+            content: const Text("Apakah anda ingin melakukan absen Siang 1"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text("Tidak"),
+              ),
+              TextButton(
+                onPressed: () async {
+                  await siang1C.postSiang1(
+                    position,
+                    distanceBapenda.toInt(),
+                    status,
+                  );
+                },
+                child: const Text("Absen"),
+              ),
+            ],
+          ),
+        );
+      } else {
+        Get.dialog(
+          AlertDialog(
+            title: const Text("Peringatan"),
+            content: const Text("Anda sudah melakukan absen Siang 1"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          ),
+        );
+      }
+    } else if (isTimeInRangeSiang2()) {
+      print("Siang2");
 
-    //             Get.snackbar("Berhasil", "ANDA BERHASIL MELAKUKAN ABSEN MASUK");
-    //           },
-    //           child: const Text("ABSEN")),
-    //     ],
-    //   );
-    // } else {
-    //   //Eksekusi Keluar
-    //   DocumentSnapshot<Map<String, dynamic>> todayDocs =
-    //       await presenceRef.doc(now).get();
-
-    //   if (todayDocs.exists) {
-    //     if (todayDocs.data()!['keluar'] == null) {
-    //       await Get.defaultDialog(
-    //         title: "Validasi Absen",
-    //         middleText:
-    //             "APAKAH ANDA YAKIN INGIN MELAKUKAN ABSEN KELUAR HARI INI?",
-    //         actions: [
-    //           OutlinedButton(
-    //             onPressed: () => Get.back(),
-    //             child: const Text("CANCEL"),
-    //           ),
-    //           ElevatedButton(
-    //               onPressed: () async {
-    //                 await presenceRef.doc(now).update(
-    //                   {
-    //                     'keluar': {
-    //                       'date': DateTime.now().toIso8601String(),
-    //                       'latitude': "${position.latitude}",
-    //                       'longitude': "${position.longitude}",
-    //                       'distance': distanceInMeters,
-    //                       'address': address,
-    //                       'status': status,
-    //                     }
-    //                   },
-    //                 );
-
-    //                 Get.back();
-
-    //                 Get.snackbar(
-    //                     "Berhasil", "ANDA BERHASIL MELAKUKAN ABSEN KELUAR");
-    //               },
-    //               child: const Text("ABSEN")),
-    //         ],
-    //       );
-    //     } else {
-    //       Get.snackbar("INFORMASI", "Anda sudah melakukan absen hari ini");
-    //     }
-    //   } else {
-    //     await Get.defaultDialog(
-    //       title: "Validasi Absen",
-    //       middleText: "APAKAH ANDA YAKIN INGIN MELAKUKAN ABSEN MASUK HARI INI?",
-    //       actions: [
-    //         OutlinedButton(
-    //           onPressed: () => Get.back(),
-    //           child: const Text("CANCEL"),
-    //         ),
-    //         ElevatedButton(
-    //             onPressed: () async {
-    //               await presenceRef.doc(now).update(
-    //                 {
-    //                   'masuk': {
-    //                     'date': DateTime.now().toIso8601String(),
-    //                     'latitude': "${position.latitude}",
-    //                     'longitude': "${position.longitude}",
-    //                     'distance': distanceInMeters,
-    //                     'address': address,
-    //                     'status': status,
-    //                   }
-    //                 },
-    //               );
-
-    //               Get.back();
-
-    //               Get.snackbar(
-    //                   "Berhasil", "ANDA BERHASIL MELAKUKAN ABSEN MASUK");
-    //             },
-    //             child: const Text("ABSEN")),
-    //       ],
-    //     );
-    //   }
-    // }
+      if (masuk.id == null) {
+        // await masukC.postMasuk(position, status);
+        Get.dialog(
+          AlertDialog(
+            title: const Text("ABSEN SIANG 2"),
+            content: const Text("Apakah anda ingin melakukan absen Siang 2"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text("Tidak"),
+              ),
+              TextButton(
+                onPressed: () async {
+                  await siang2C.postSiang2(
+                    position,
+                    distanceBapenda.toInt(),
+                    status,
+                  );
+                },
+                child: const Text("Absen"),
+              ),
+            ],
+          ),
+        );
+      } else {
+        Get.dialog(
+          AlertDialog(
+            title: const Text("Peringatan"),
+            content: const Text("Anda sudah melakukan absen Siang 2"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          ),
+        );
+      }
+    } else if (isTimeInRangePulang()) {
+      print("Pulang");
+      if (pulang.id == null) {
+        // await masukC.postMasuk(position, status);
+        Get.dialog(
+          AlertDialog(
+            title: const Text("ABSEN PULANG"),
+            content: const Text("Apakah anda ingin melakukan absen Pulang"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text("Tidak"),
+              ),
+              TextButton(
+                onPressed: () async {
+                  await pulangC.postPulang(
+                    position,
+                    distanceBapenda.toInt(),
+                    status,
+                  );
+                },
+                child: const Text("Absen"),
+              ),
+            ],
+          ),
+        );
+      } else {
+        Get.dialog(
+          AlertDialog(
+            title: const Text("Peringatan"),
+            content: const Text("Anda sudah melakukan absen Pulang"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          ),
+        );
+      }
+    }
   }
 
   Future<Map<String, dynamic>> _determinePosition() async {
@@ -240,5 +387,61 @@ class PageIndexController extends GetxController {
       'message': 'Berhasil mendapatkan position',
       'error': false,
     };
+  }
+
+  bool isTimeInRangePagi() {
+    var now = DateTime.now();
+    var startTime = DateTime(now.year, now.month, now.day, 5, 0);
+    var endTime = DateTime(now.year, now.month, now.day, 8, 0);
+    return now.isAfter(startTime) && now.isBefore(endTime);
+  }
+
+  bool isTimeInRangeSiang1() {
+    var now = DateTime.now();
+    var startTime = DateTime(now.year, now.month, now.day, 11, 30);
+    var endTime = DateTime(now.year, now.month, now.day, 12, 0);
+    return now.isAfter(startTime) && now.isBefore(endTime);
+  }
+
+  bool isTimeInRangeSiang2() {
+    var now = DateTime.now();
+    var startTime = DateTime(now.year, now.month, now.day, 13, 00);
+    var endTime = DateTime(now.year, now.month, now.day, 14, 0);
+    return now.isAfter(startTime) && now.isBefore(endTime);
+  }
+
+  bool isTimeInRangePulang() {
+    var now = DateTime.now();
+    var startTime = DateTime(now.year, now.month, now.day, 16, 00);
+    var endTime = DateTime(now.year, now.month, now.day, 23, 59);
+    return now.isAfter(startTime) && now.isBefore(endTime);
+  }
+
+  bool isTimeInRangeNotPagi() {
+    var now = DateTime.now();
+    var startTime = DateTime(now.year, now.month, now.day, 00, 01);
+    var endTime = DateTime(now.year, now.month, now.day, 04, 59);
+    return now.isAfter(startTime) && now.isBefore(endTime);
+  }
+
+  bool isTimeInRangeNotSiang1() {
+    var now = DateTime.now();
+    var startTime = DateTime(now.year, now.month, now.day, 8, 1);
+    var endTime = DateTime(now.year, now.month, now.day, 11, 29);
+    return now.isAfter(startTime) && now.isBefore(endTime);
+  }
+
+  bool isTimeInRangeNotSiang2() {
+    var now = DateTime.now();
+    var startTime = DateTime(now.year, now.month, now.day, 12, 01);
+    var endTime = DateTime(now.year, now.month, now.day, 12, 59);
+    return now.isAfter(startTime) && now.isBefore(endTime);
+  }
+
+  bool isTimeInRangeNotPulang() {
+    var now = DateTime.now();
+    var startTime = DateTime(now.year, now.month, now.day, 14, 1);
+    var endTime = DateTime(now.year, now.month, now.day, 15, 59);
+    return now.isAfter(startTime) && now.isBefore(endTime);
   }
 }

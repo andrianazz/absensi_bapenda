@@ -48,7 +48,7 @@ class LoginController extends GetxController {
 
           prefs.setString('user', user);
           Get.snackbar(
-              "Login Berhasil", "${data['status']} ${data['data']['nama']}");
+              "Login Berhasil", "${data['message']} ${data['data']['nama']}");
           isLoading.value = false;
           Get.offAllNamed(Routes.HOME);
 

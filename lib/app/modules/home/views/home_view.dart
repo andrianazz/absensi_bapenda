@@ -1,4 +1,12 @@
+import 'package:absensi_bapenda/app/data/controllers/masuk_controller.dart';
 import 'package:absensi_bapenda/app/data/controllers/page_index_controller.dart';
+import 'package:absensi_bapenda/app/data/controllers/pulang_controller.dart';
+import 'package:absensi_bapenda/app/data/controllers/siang1_controller.dart';
+import 'package:absensi_bapenda/app/data/controllers/siang2.controller.dart';
+import 'package:absensi_bapenda/app/data/models/masuk_model.dart';
+import 'package:absensi_bapenda/app/data/models/pulang_model.dart';
+import 'package:absensi_bapenda/app/data/models/siang1_model.dart';
+import 'package:absensi_bapenda/app/data/models/siang2_model.dart';
 import 'package:absensi_bapenda/theme/color.dart';
 import 'package:absensi_bapenda/theme/style.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
@@ -14,6 +22,10 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     PageIndexController pageC = Get.put(PageIndexController());
+    MasukController masukC = Get.put(MasukController());
+    Siang1Controller siang1C = Get.put(Siang1Controller());
+    Siang2Controller siang2C = Get.put(Siang2Controller());
+    PulangController pulangC = Get.put(PulangController());
 
     return Scaffold(
       key: controller.scaffoldKey,
@@ -93,46 +105,67 @@ class HomeView extends GetView<HomeController> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Column(
-                          children: [
-                            Text(
-                              "Absen Pagi",
-                              style: poppins.copyWith(
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.bold,
-                                color: textWhiteColor,
-                              ),
-                            ),
-                            Text(
-                              "06:00",
-                              style: poppins.copyWith(
-                                fontSize: 14.sp,
-                                color: textWhiteColor,
-                              ),
-                            )
-                          ],
-                        ),
+                        FutureBuilder<Masuk>(
+                            future: masukC.getMasukwithUserId(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+
+                              return Column(
+                                children: [
+                                  Text(
+                                    "Absen Pagi",
+                                    style: poppins.copyWith(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: textWhiteColor,
+                                    ),
+                                  ),
+                                  Text(
+                                    snapshot.data!.jamMasuk ?? "-",
+                                    style: poppins.copyWith(
+                                      fontSize: 14.sp,
+                                      color: textWhiteColor,
+                                    ),
+                                  )
+                                ],
+                              );
+                            }),
                         Container(
                             width: 2.w, height: 35.h, color: lineBlueColor),
-                        Column(
-                          children: [
-                            Text(
-                              "Absen Siang 1",
-                              style: poppins.copyWith(
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.bold,
-                                color: textWhiteColor,
-                              ),
-                            ),
-                            Text(
-                              "-",
-                              style: poppins.copyWith(
-                                fontSize: 14.sp,
-                                color: textWhiteColor,
-                              ),
-                            )
-                          ],
-                        ),
+                        FutureBuilder<Siang1>(
+                            future: siang1C.getSiang1withUserId(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                              return Column(
+                                children: [
+                                  Text(
+                                    "Absen Siang 1",
+                                    style: poppins.copyWith(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: textWhiteColor,
+                                    ),
+                                  ),
+                                  Text(
+                                    snapshot.data!.jamSiang ?? "-",
+                                    style: poppins.copyWith(
+                                      fontSize: 14.sp,
+                                      color: textWhiteColor,
+                                    ),
+                                  )
+                                ],
+                              );
+                            }),
                       ],
                     ),
                     SizedBox(height: 10.h),
@@ -145,46 +178,66 @@ class HomeView extends GetView<HomeController> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Column(
-                          children: [
-                            Text(
-                              "Absen Siang 2",
-                              style: poppins.copyWith(
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.bold,
-                                color: textWhiteColor,
-                              ),
-                            ),
-                            Text(
-                              "13:30",
-                              style: poppins.copyWith(
-                                fontSize: 14.sp,
-                                color: textWhiteColor,
-                              ),
-                            )
-                          ],
-                        ),
+                        FutureBuilder<Siang2>(
+                            future: siang2C.getSiang2withUserId(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                              return Column(
+                                children: [
+                                  Text(
+                                    "Absen Siang 2",
+                                    style: poppins.copyWith(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: textWhiteColor,
+                                    ),
+                                  ),
+                                  Text(
+                                    snapshot.data!.jamSiang2 ?? "-",
+                                    style: poppins.copyWith(
+                                      fontSize: 14.sp,
+                                      color: textWhiteColor,
+                                    ),
+                                  )
+                                ],
+                              );
+                            }),
                         Container(
                             width: 2.w, height: 35.h, color: lineBlueColor),
-                        Column(
-                          children: [
-                            Text(
-                              "Absen Pulang",
-                              style: poppins.copyWith(
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.bold,
-                                color: textWhiteColor,
-                              ),
-                            ),
-                            Text(
-                              "16:00",
-                              style: poppins.copyWith(
-                                fontSize: 14.sp,
-                                color: textWhiteColor,
-                              ),
-                            )
-                          ],
-                        ),
+                        FutureBuilder<Pulang>(
+                            future: pulangC.getPulangwithUserId(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                              return Column(
+                                children: [
+                                  Text(
+                                    "Absen Pulang",
+                                    style: poppins.copyWith(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: textWhiteColor,
+                                    ),
+                                  ),
+                                  Text(
+                                    snapshot.data!.jamPulang ?? "-",
+                                    style: poppins.copyWith(
+                                      fontSize: 14.sp,
+                                      color: textWhiteColor,
+                                    ),
+                                  )
+                                ],
+                              );
+                            }),
                       ],
                     ),
                   ],
@@ -237,11 +290,140 @@ class HomeView extends GetView<HomeController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
+                        FutureBuilder<Masuk>(
+                            future: masukC.getMasukwithUserId(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              }
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Absen Pagi",
+                                    style: poppins.copyWith(
+                                      fontSize: 14.sp,
+                                      color: textBlueColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    snapshot.data!.jamMasuk ?? "-",
+                                    style: poppins.copyWith(
+                                      fontSize: 14.sp,
+                                      color: textBlueColor,
+                                    ),
+                                  ),
+                                  Text(
+                                    snapshot.data!.status ?? "-",
+                                    style: poppins.copyWith(
+                                      fontSize: 14.sp,
+                                      color: textBlueColor,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }),
+                        Text(
+                          controller.today,
+                          style: poppins.copyWith(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.bold,
+                            color: textBlueColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20.h),
+                    FutureBuilder<Siang1>(
+                        future: siang1C.getSiang1withUserId(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Absen Siang 1",
+                                style: poppins.copyWith(
+                                  fontSize: 14.sp,
+                                  color: textBlueColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                snapshot.data!.jamSiang ?? "-",
+                                style: poppins.copyWith(
+                                  fontSize: 14.sp,
+                                  color: textBlueColor,
+                                ),
+                              ),
+                              Text(
+                                snapshot.data!.status ?? "-",
+                                style: poppins.copyWith(
+                                  fontSize: 14.sp,
+                                  color: textBlueColor,
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
+                    SizedBox(height: 20.h),
+                    FutureBuilder<Siang2>(
+                        future: siang2C.getSiang2withUserId(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Absen Siang 2",
+                                style: poppins.copyWith(
+                                  fontSize: 14.sp,
+                                  color: textBlueColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                snapshot.data!.jamSiang2 ?? "-",
+                                style: poppins.copyWith(
+                                  fontSize: 14.sp,
+                                  color: textBlueColor,
+                                ),
+                              ),
+                              Text(
+                                snapshot.data!.status ?? "-",
+                                style: poppins.copyWith(
+                                  fontSize: 14.sp,
+                                  color: textBlueColor,
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
+                    SizedBox(height: 20.h),
+                    FutureBuilder<Pulang>(
+                      future: pulangC.getPulangwithUserId(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                        return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Absen Pagi",
+                              "Absen Pulang",
                               style: poppins.copyWith(
                                 fontSize: 14.sp,
                                 color: textBlueColor,
@@ -249,114 +431,22 @@ class HomeView extends GetView<HomeController> {
                               ),
                             ),
                             Text(
-                              "06:00",
+                              snapshot.data!.jamPulang ?? "-",
                               style: poppins.copyWith(
                                 fontSize: 14.sp,
                                 color: textBlueColor,
                               ),
                             ),
                             Text(
-                              "Bapenda",
+                              snapshot.data!.status ?? "-",
                               style: poppins.copyWith(
                                 fontSize: 14.sp,
                                 color: textBlueColor,
                               ),
                             ),
                           ],
-                        ),
-                        Text(
-                          "Senin, 24 Mei 2023",
-                          style: poppins.copyWith(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.bold,
-                            color: textBlueColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20.h),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Absen Siang 1",
-                          style: poppins.copyWith(
-                            fontSize: 14.sp,
-                            color: textBlueColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          "-",
-                          style: poppins.copyWith(
-                            fontSize: 14.sp,
-                            color: textBlueColor,
-                          ),
-                        ),
-                        Text(
-                          "-",
-                          style: poppins.copyWith(
-                            fontSize: 14.sp,
-                            color: textBlueColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20.h),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Absen Siang 2",
-                          style: poppins.copyWith(
-                            fontSize: 14.sp,
-                            color: textBlueColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          "14:00",
-                          style: poppins.copyWith(
-                            fontSize: 14.sp,
-                            color: textBlueColor,
-                          ),
-                        ),
-                        Text(
-                          "Sekretariat",
-                          style: poppins.copyWith(
-                            fontSize: 14.sp,
-                            color: textBlueColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20.h),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Absen Pulang",
-                          style: poppins.copyWith(
-                            fontSize: 14.sp,
-                            color: textBlueColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          "16:00",
-                          style: poppins.copyWith(
-                            fontSize: 14.sp,
-                            color: textBlueColor,
-                          ),
-                        ),
-                        Text(
-                          "UPT Sekretariat",
-                          style: poppins.copyWith(
-                            fontSize: 14.sp,
-                            color: textBlueColor,
-                          ),
-                        ),
-                      ],
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -382,11 +472,140 @@ class HomeView extends GetView<HomeController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
+                        FutureBuilder<Masuk>(
+                            future: masukC.getMasukYesterday(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              }
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Absen Pagi",
+                                    style: poppins.copyWith(
+                                      fontSize: 14.sp,
+                                      color: textBlueColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    snapshot.data!.jamMasuk ?? "-",
+                                    style: poppins.copyWith(
+                                      fontSize: 14.sp,
+                                      color: textBlueColor,
+                                    ),
+                                  ),
+                                  Text(
+                                    snapshot.data!.status ?? "-",
+                                    style: poppins.copyWith(
+                                      fontSize: 14.sp,
+                                      color: textBlueColor,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }),
+                        Text(
+                          controller.yesterday,
+                          style: poppins.copyWith(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.bold,
+                            color: textBlueColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20.h),
+                    FutureBuilder<Siang1>(
+                        future: siang1C.getSiang1Yesterday(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Absen Siang 1",
+                                style: poppins.copyWith(
+                                  fontSize: 14.sp,
+                                  color: textBlueColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                snapshot.data!.jamSiang ?? "-",
+                                style: poppins.copyWith(
+                                  fontSize: 14.sp,
+                                  color: textBlueColor,
+                                ),
+                              ),
+                              Text(
+                                snapshot.data!.status ?? "-",
+                                style: poppins.copyWith(
+                                  fontSize: 14.sp,
+                                  color: textBlueColor,
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
+                    SizedBox(height: 20.h),
+                    FutureBuilder<Siang2>(
+                        future: siang2C.getSiang2Yesterday(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Absen Siang 2",
+                                style: poppins.copyWith(
+                                  fontSize: 14.sp,
+                                  color: textBlueColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                snapshot.data!.jamSiang2 ?? "-",
+                                style: poppins.copyWith(
+                                  fontSize: 14.sp,
+                                  color: textBlueColor,
+                                ),
+                              ),
+                              Text(
+                                snapshot.data!.status ?? "-",
+                                style: poppins.copyWith(
+                                  fontSize: 14.sp,
+                                  color: textBlueColor,
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
+                    SizedBox(height: 20.h),
+                    FutureBuilder<Pulang>(
+                      future: pulangC.getPulangYesterday(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                        return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Absen Pagi",
+                              "Absen Pulang",
                               style: poppins.copyWith(
                                 fontSize: 14.sp,
                                 color: textBlueColor,
@@ -394,114 +613,22 @@ class HomeView extends GetView<HomeController> {
                               ),
                             ),
                             Text(
-                              "06:00",
+                              snapshot.data!.jamPulang ?? "-",
                               style: poppins.copyWith(
                                 fontSize: 14.sp,
                                 color: textBlueColor,
                               ),
                             ),
                             Text(
-                              "Bapenda",
+                              snapshot.data!.status ?? "-",
                               style: poppins.copyWith(
                                 fontSize: 14.sp,
                                 color: textBlueColor,
                               ),
                             ),
                           ],
-                        ),
-                        Text(
-                          "Minggu, 23 Mei 2023",
-                          style: poppins.copyWith(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.bold,
-                            color: textBlueColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20.h),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Absen Siang 1",
-                          style: poppins.copyWith(
-                            fontSize: 14.sp,
-                            color: textBlueColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          "-",
-                          style: poppins.copyWith(
-                            fontSize: 14.sp,
-                            color: textBlueColor,
-                          ),
-                        ),
-                        Text(
-                          "-",
-                          style: poppins.copyWith(
-                            fontSize: 14.sp,
-                            color: textBlueColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20.h),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Absen Siang 2",
-                          style: poppins.copyWith(
-                            fontSize: 14.sp,
-                            color: textBlueColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          "-",
-                          style: poppins.copyWith(
-                            fontSize: 14.sp,
-                            color: textBlueColor,
-                          ),
-                        ),
-                        Text(
-                          "-",
-                          style: poppins.copyWith(
-                            fontSize: 14.sp,
-                            color: textBlueColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20.h),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Absen Pulang",
-                          style: poppins.copyWith(
-                            fontSize: 14.sp,
-                            color: textBlueColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          "16:00",
-                          style: poppins.copyWith(
-                            fontSize: 14.sp,
-                            color: textBlueColor,
-                          ),
-                        ),
-                        Text(
-                          "UPT Sekretariat",
-                          style: poppins.copyWith(
-                            fontSize: 14.sp,
-                            color: textBlueColor,
-                          ),
-                        ),
-                      ],
+                        );
+                      },
                     ),
                   ],
                 ),
