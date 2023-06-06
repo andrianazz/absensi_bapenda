@@ -1,7 +1,9 @@
+import 'package:absensi_bapenda/app/data/controllers/absensi_controller.dart';
 import 'package:absensi_bapenda/app/data/controllers/masuk_controller.dart';
 import 'package:absensi_bapenda/app/data/controllers/pulang_controller.dart';
 import 'package:absensi_bapenda/app/data/controllers/siang1_controller.dart';
 import 'package:absensi_bapenda/app/data/controllers/siang2.controller.dart';
+import 'package:absensi_bapenda/app/data/models/absensi_model.dart';
 import 'package:absensi_bapenda/app/data/models/masuk_model.dart';
 import 'package:absensi_bapenda/app/data/models/pulang_model.dart';
 import 'package:absensi_bapenda/app/data/models/siang1_model.dart';
@@ -18,23 +20,29 @@ class PageIndexController extends GetxController {
   Siang1Controller siang1C = Get.put(Siang1Controller());
   Siang2Controller siang2C = Get.put(Siang2Controller());
   PulangController pulangC = Get.put(PulangController());
+  AbsensiController absensiC = Get.put(AbsensiController());
 
   HomeController homeC = Get.put(HomeController());
 
   RxInt pageIndex = 0.obs;
 
-  // FirebaseAuth auth = FirebaseAuth.instance;
-  // FirebaseFirestore firestore = FirebaseFirestore.instance;
-
   void changePage(int i) async {
     switch (i) {
       case 0:
         pageIndex.value = 0;
+
         Get.offAllNamed(Routes.HOME);
         break;
 
       case 1:
         pageIndex.value = 1;
+
+        //Cek Absensi hari ini
+        Absensi absensi = await absensiC.getAbsensiToday();
+        if (absensi.id == null) {
+          print("hari ini belum ada");
+          await absensiC.createAbsensiToday();
+        }
 
         if (isTimeInRangeNotPagi()) {
           Get.dialog(
@@ -137,19 +145,150 @@ class PageIndexController extends GetxController {
   }
 
   Future<void> presence(Position position, String address) async {
-    int uid = homeC.userModel.value.id!;
-    String now = DateTime.now().toString().split(' ')[0];
-
+    //Koordinat setiap UPT dan Bapenda
     double distanceBapenda = Geolocator.distanceBetween(
         position.latitude, position.longitude, 0.523141, 101.440834);
+    double distanceUPT1 = Geolocator.distanceBetween(
+        position.latitude, position.longitude, 0.532123, 101.450668);
+    double distanceUPT2 = Geolocator.distanceBetween(
+        position.latitude, position.longitude, 0.560506, 101.440522);
+    double distanceUPT3 = Geolocator.distanceBetween(
+        position.latitude, position.longitude, 0.476278, 101.429556);
+    double distanceUPT4 = Geolocator.distanceBetween(
+        position.latitude, position.longitude, 0.500229, 101.412943);
+    double distanceUPT5 = Geolocator.distanceBetween(
+        position.latitude, position.longitude, 0.465298, 101.387372);
 
-    String status = "Di Luar Area";
+    //Status sebagai jalan / kantor
+    String status = address;
 
-    if (distanceBapenda <= 100) {
-      status = "Di dalam Area";
-
-      print(distanceBapenda.toInt());
-      print(status);
+    //Codition jika diluar jarak kantor
+    if (homeC.userModel.value.unitKerjaId == 0) {
+      if (distanceBapenda <= 100) {
+        status = "Bapenda Pekanbaru";
+      } else {
+        Get.dialog(
+          AlertDialog(
+            title: const Text("Peringatan"),
+            content: const Text(
+                "Anda berada diluar jarak kantor, Silahkan melakukan absen pada lokasi yang telah ditentukan"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
+    } else if (homeC.userModel.value.unitKerjaId == 1) {
+      if (distanceUPT1 <= 50) {
+        status = "UPT 1";
+      } else {
+        Get.dialog(
+          AlertDialog(
+            title: const Text("Peringatan"),
+            content: const Text(
+                "Anda berada diluar jarak kantor, Silahkan melakukan absen pada lokasi yang telah ditentukan"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
+    } else if (homeC.userModel.value.unitKerjaId == 2) {
+      if (distanceUPT2 <= 50) {
+        status = "UPT 2";
+      } else {
+        Get.dialog(
+          AlertDialog(
+            title: const Text("Peringatan"),
+            content: const Text(
+                "Anda berada diluar jarak kantor, Silahkan melakukan absen pada lokasi yang telah ditentukan"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
+    } else if (homeC.userModel.value.unitKerjaId == 3) {
+      if (distanceUPT3 <= 50) {
+        status = "UPT 3";
+      } else {
+        Get.dialog(
+          AlertDialog(
+            title: const Text("Peringatan"),
+            content: const Text(
+                "Anda berada diluar jarak kantor, Silahkan melakukan absen pada lokasi yang telah ditentukan"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
+    } else if (homeC.userModel.value.unitKerjaId == 4) {
+      if (distanceUPT4 <= 50) {
+        status = "UPT 4";
+      } else {
+        Get.dialog(
+          AlertDialog(
+            title: const Text("Peringatan"),
+            content: const Text(
+                "Anda berada diluar jarak kantor, Silahkan melakukan absen pada lokasi yang telah ditentukan"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
+    } else if (homeC.userModel.value.unitKerjaId == 5) {
+      if (distanceUPT5 <= 50) {
+        status = "UPT 5";
+      } else {
+        Get.dialog(
+          AlertDialog(
+            title: const Text("Peringatan"),
+            content: const Text(
+                "Anda berada diluar jarak kantor, Silahkan melakukan absen pada lokasi yang telah ditentukan"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
     }
 
     Masuk masuk = await masukC.getMasukToday();
@@ -157,8 +296,8 @@ class PageIndexController extends GetxController {
     Siang2 siang2 = await siang2C.getSiang2Today();
     Pulang pulang = await pulangC.getPulangToday();
 
+    //Memasukkan data ke dalam database
     if (isTimeInRangePagi()) {
-      print("pagi");
       if (masuk.id == null) {
         Get.dialog(
           AlertDialog(
@@ -199,9 +338,7 @@ class PageIndexController extends GetxController {
         ));
       }
     } else if (isTimeInRangeSiang1()) {
-      print("Siang1");
-
-      if (masuk.id == null) {
+      if (siang1.id == null) {
         // await masukC.postMasuk(position, status);
         Get.dialog(
           AlertDialog(
@@ -244,9 +381,7 @@ class PageIndexController extends GetxController {
         );
       }
     } else if (isTimeInRangeSiang2()) {
-      print("Siang2");
-
-      if (masuk.id == null) {
+      if (siang2.id == null) {
         // await masukC.postMasuk(position, status);
         Get.dialog(
           AlertDialog(
@@ -289,9 +424,7 @@ class PageIndexController extends GetxController {
         );
       }
     } else if (isTimeInRangePulang()) {
-      print("Pulang");
       if (pulang.id == null) {
-        // await masukC.postMasuk(position, status);
         Get.dialog(
           AlertDialog(
             title: const Text("ABSEN PULANG"),
@@ -308,8 +441,10 @@ class PageIndexController extends GetxController {
                   await pulangC.postPulang(
                     position,
                     distanceBapenda.toInt(),
-                    status,
+                    ' $address',
                   );
+
+                  Get.offAllNamed(Routes.HOME);
                 },
                 child: const Text("Absen"),
               ),

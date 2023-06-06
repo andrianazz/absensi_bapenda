@@ -1,3 +1,5 @@
+import 'package:absensi_bapenda/app/data/controllers/absensi_controller.dart';
+import 'package:absensi_bapenda/app/data/models/absensi_model.dart';
 import 'package:absensi_bapenda/app/data/models/siang2_model.dart';
 import 'package:absensi_bapenda/app/modules/home/controllers/home_controller.dart';
 import 'package:absensi_bapenda/theme/variable.dart';
@@ -7,6 +9,8 @@ import 'package:get/get.dart';
 
 class Siang2Controller {
   HomeController homeC = Get.put(HomeController());
+  AbsensiController absensiC = Get.put(AbsensiController());
+
   Dio dio = Dio();
 
   Future<Siang2> getSiang2withUserId() async {
@@ -62,9 +66,10 @@ class Siang2Controller {
 
   Future<Map<String, dynamic>> postSiang2(
       Position position, int radius, String status) async {
+    Absensi absensi = await absensiC.getAbsensiToday();
+
     return await dio.post("$baseUrlAPI/siang2", data: {
-      "user_id": homeC.userModel.value.id,
-      "tanggal": DateTime.now().toString().split(' ')[0],
+      "absensi_id": absensi.id,
       "jam_siang2": DateTime.now().toString().split(' ')[1].split('.')[0],
       "radius": radius,
       "long": position.longitude,
