@@ -64,17 +64,16 @@ class Siang1Controller {
     return siang1;
   }
 
-  Future<Map<String, dynamic>> postSiang1(
-      Position position, int radius, String status) async {
+  Future<void> postSiang1(Position position, int radius, String status) async {
     Absensi absensi = await absensiC.getAbsensiToday();
 
-    return await dio.post("$baseUrlAPI/siang1", data: {
+    await dio.post("$baseUrlAPI/siang1", data: {
       "absensi_id": absensi.id,
       "jam_siang": DateTime.now().toString().split(' ')[1].split('.')[0],
       "radius": radius,
       "long": position.longitude,
       "lang": position.latitude,
       "status": status,
-    }).then((value) => value.data['message']);
+    }).then((value) => Get.snackbar("Berhasil", "Berhasil Absen Siang"));
   }
 }

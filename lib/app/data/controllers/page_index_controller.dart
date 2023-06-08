@@ -2,7 +2,7 @@ import 'package:absensi_bapenda/app/data/controllers/absensi_controller.dart';
 import 'package:absensi_bapenda/app/data/controllers/masuk_controller.dart';
 import 'package:absensi_bapenda/app/data/controllers/pulang_controller.dart';
 import 'package:absensi_bapenda/app/data/controllers/siang1_controller.dart';
-import 'package:absensi_bapenda/app/data/controllers/siang2.controller.dart';
+import 'package:absensi_bapenda/app/data/controllers/siang2_controller.dart';
 import 'package:absensi_bapenda/app/data/models/absensi_model.dart';
 import 'package:absensi_bapenda/app/data/models/masuk_model.dart';
 import 'package:absensi_bapenda/app/data/models/pulang_model.dart';
@@ -81,7 +81,7 @@ class PageIndexController extends GetxController {
             AlertDialog(
               title: const Text("Peringatan"),
               content: const Text(
-                  "Absen Siang 2 dibuka dari jam 14:00 - 13:00, Silahkan melakukan absen pada waktu yang telah ditentukan"),
+                  "Absen Siang 2 dibuka dari jam 13:00 - 14:00, Silahkan melakukan absen pada waktu yang telah ditentukan"),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -100,7 +100,7 @@ class PageIndexController extends GetxController {
                   "Absen Pulang dibuka dari jam 16:00 - 23:59, Silahkan melakukan absen pada waktu yang telah ditentukan"),
               actions: [
                 TextButton(
-                  onPressed: () {
+                  onPressed: () async {
                     Get.back();
                   },
                   child: const Text("OK"),
@@ -192,7 +192,7 @@ class PageIndexController extends GetxController {
           AlertDialog(
             title: const Text("Peringatan"),
             content: const Text(
-                "Anda berada diluar jarak kantor, Silahkan melakukan absen pada lokasi yang telah ditentukan"),
+                "Anda berada diluar jarak kantor UPT1, Silahkan melakukan absen pada lokasi yang telah ditentukan"),
             actions: [
               TextButton(
                 onPressed: () {

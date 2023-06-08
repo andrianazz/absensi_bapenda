@@ -2,7 +2,7 @@ import 'package:absensi_bapenda/app/data/controllers/masuk_controller.dart';
 import 'package:absensi_bapenda/app/data/controllers/page_index_controller.dart';
 import 'package:absensi_bapenda/app/data/controllers/pulang_controller.dart';
 import 'package:absensi_bapenda/app/data/controllers/siang1_controller.dart';
-import 'package:absensi_bapenda/app/data/controllers/siang2.controller.dart';
+import 'package:absensi_bapenda/app/data/controllers/siang2_controller.dart';
 import 'package:absensi_bapenda/app/data/models/masuk_model.dart';
 import 'package:absensi_bapenda/app/data/models/pulang_model.dart';
 import 'package:absensi_bapenda/app/data/models/siang1_model.dart';
