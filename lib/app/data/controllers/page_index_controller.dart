@@ -44,6 +44,29 @@ class PageIndexController extends GetxController {
           await absensiC.createAbsensiToday();
         }
 
+        //check day is weekend
+        bool isWeekend = await homeC.isWeekend();
+
+        if (isWeekend) {
+          Get.dialog(
+            AlertDialog(
+              title: const Text("Peringatan"),
+              content: const Text(
+                  "Hari ini adalah hari libur, Silahkan melakukan absen pada hari kerja"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: const Text("OK"),
+                ),
+              ],
+            ),
+          );
+
+          break;
+        }
+
         if (isTimeInRangeNotPagi()) {
           Get.dialog(
             AlertDialog(

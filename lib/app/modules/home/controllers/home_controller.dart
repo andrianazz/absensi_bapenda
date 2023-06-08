@@ -89,6 +89,11 @@ class HomeController extends GetxController {
     }
   }
 
+  Future<bool> isWeekend() async {
+    DateTime now = DateTime.now();
+    return now.weekday == DateTime.saturday || now.weekday == DateTime.sunday;
+  }
+
   @override
   void onInit() async {
     super.onInit();
