@@ -3,4 +3,4 @@
 
 //For Real Device
 // const String baseUrlAPI = "http://192.168.76.71/absensi-bapenda/public/api";
-const String baseUrlAPI = "http://192.168.11.105/absensi-bapenda/public/api";
+const String baseUrlAPI = "http://192.168.22.70/absensi-bapenda/public/api";

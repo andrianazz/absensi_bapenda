@@ -186,28 +186,7 @@ class PageIndexController extends GetxController {
     String status = address;
 
     //Codition jika diluar jarak kantor
-    if (homeC.userModel.value.unitKerjaId == 0) {
-      if (distanceBapenda <= 100) {
-        status = "Bapenda Pekanbaru";
-      } else {
-        Get.dialog(
-          AlertDialog(
-            title: const Text("Peringatan"),
-            content: const Text(
-                "Anda berada diluar jarak kantor, Silahkan melakukan absen pada lokasi yang telah ditentukan"),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Get.back();
-                },
-                child: const Text("OK"),
-              ),
-            ],
-          ),
-        );
-        return;
-      }
-    } else if (homeC.userModel.value.unitKerjaId == 1) {
+    if (homeC.userModel.value.unitKerjaId == 1) {
       if (distanceUPT1 <= 50) {
         status = "UPT 1";
       } else {
@@ -236,7 +215,7 @@ class PageIndexController extends GetxController {
           AlertDialog(
             title: const Text("Peringatan"),
             content: const Text(
-                "Anda berada diluar jarak kantor, Silahkan melakukan absen pada lokasi yang telah ditentukan"),
+                "Anda berada diluar jarak kantor UPT2, Silahkan melakukan absen pada lokasi yang telah ditentukan"),
             actions: [
               TextButton(
                 onPressed: () {
@@ -257,7 +236,7 @@ class PageIndexController extends GetxController {
           AlertDialog(
             title: const Text("Peringatan"),
             content: const Text(
-                "Anda berada diluar jarak kantor, Silahkan melakukan absen pada lokasi yang telah ditentukan"),
+                "Anda berada diluar jarak  UPT 3, Silahkan melakukan absen pada lokasi yang telah ditentukan"),
             actions: [
               TextButton(
                 onPressed: () {
@@ -278,7 +257,7 @@ class PageIndexController extends GetxController {
           AlertDialog(
             title: const Text("Peringatan"),
             content: const Text(
-                "Anda berada diluar jarak kantor, Silahkan melakukan absen pada lokasi yang telah ditentukan"),
+                "Anda berada diluar jarak kantor UPT 4, Silahkan melakukan absen pada lokasi yang telah ditentukan"),
             actions: [
               TextButton(
                 onPressed: () {
@@ -299,7 +278,28 @@ class PageIndexController extends GetxController {
           AlertDialog(
             title: const Text("Peringatan"),
             content: const Text(
-                "Anda berada diluar jarak kantor, Silahkan melakukan absen pada lokasi yang telah ditentukan"),
+                "Anda berada diluar jarak kantor UPT 5, Silahkan melakukan absen pada lokasi yang telah ditentukan"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
+    } else if (homeC.userModel.value.unitKerjaId! >= 6) {
+      if (distanceBapenda <= 100) {
+        status = "Bapenda Pekanbaru";
+      } else {
+        Get.dialog(
+          AlertDialog(
+            title: const Text("Peringatan"),
+            content: const Text(
+                "Anda berada diluar jarak kantor Bapenda, Silahkan melakukan absen pada lokasi yang telah ditentukan"),
             actions: [
               TextButton(
                 onPressed: () {
