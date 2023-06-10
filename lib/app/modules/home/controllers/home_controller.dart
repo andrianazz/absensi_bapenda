@@ -29,6 +29,9 @@ class HomeController extends GetxController {
   RxString defaultImage =
       "https://ui-avatars.com/api/?name=No+Name&background=0D8ABC&bold=true&color=fff&rounded=true"
           .obs;
+  RxString defaultProfile =
+      "https://ui-avatars.com/api/?name=No+Name&background=0D8ABC&bold=true&color=fff&size=512"
+          .obs;
 
   Future<Map<String, dynamic>> getUser() async {
     prefs = await SharedPreferences.getInstance();
@@ -64,7 +67,7 @@ class HomeController extends GetxController {
 
   Future<void> deletePreference() async {
     prefs = await SharedPreferences.getInstance();
-    prefs.remove('user');
+    prefs.clear();
   }
 
   Future<void> logout() async {
@@ -105,10 +108,17 @@ class HomeController extends GetxController {
       mapUser = await getUser();
       userModel.value = await getUserModel();
 
-      print(userModel.toJson());
+      debugPrint(userModel.value.toJson().toString());
 
-      defaultImage.value =
-          "https://ui-avatars.com/api/?name=${userModel.value.nama!.split(' ').join('+')}&background=0D8ABC&bold=true&color=fff&rounded=true";
+      defaultImage.value = userModel.value.imageUrl!.isEmpty ||
+              userModel.value.imageUrl == ""
+          ? "https://ui-avatars.com/api/?name=${userModel.value.nama!.split(' ').join('+')}&background=0D8ABC&bold=true&color=fff&rounded=true"
+          : "$baseUrl/storage/images/${userModel.value.imageUrl}";
+
+      defaultProfile.value = userModel.value.imageUrl!.isEmpty ||
+              userModel.value.imageUrl == ""
+          ? "https://ui-avatars.com/api/?name=${userModel.value.nama!.split(' ').join('+')}&background=0D8ABC&bold=true&color=fff&size=512"
+          : '$baseUrl/storage/images/${userModel.value.imageUrl}';
     }
   }
 }

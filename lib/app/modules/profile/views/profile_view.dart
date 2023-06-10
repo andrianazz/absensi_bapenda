@@ -30,15 +30,16 @@ class ProfileView extends GetView<ProfileController> {
                 child: GestureDetector(
                   onTap: () async {},
                   child: Obx(
-                    () => ClipOval(
-                      child: SizedBox(
-                        height: 200,
-                        width: 200,
-                        child: Center(
-                          child: Image.network(
-                            homeC.defaultImage.value,
-                            fit: BoxFit.fill,
+                    () => Container(
+                      height: 200,
+                      width: 200,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(40.r),
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            homeC.defaultProfile.value,
                           ),
+                          fit: BoxFit.contain,
                         ),
                       ),
                     ),
@@ -50,19 +51,24 @@ class ProfileView extends GetView<ProfileController> {
                 () => Column(
                   children: [
                     Text(
-                      homeC.userModel.value.nama!.toUpperCase() ??
+                      homeC.userModel.value.nama?.toUpperCase() ??
                           "Tidak ada Nama",
                       style: poppins.copyWith(
                         fontSize: 24.sp,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    Text(
-                      homeC.userModel.value.unitKerja!.namaUnitKerja! ??
-                          "Tidak ada Unit Kerja",
-                      style: poppins.copyWith(
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.w500,
+                    GestureDetector(
+                      onTap: () async {
+                        await homeC.logout();
+                      },
+                      child: Text(
+                        homeC.userModel.value.unitKerja?.namaUnitKerja! ??
+                            "Tidak ada Unit Kerja",
+                        style: poppins.copyWith(
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ],
@@ -71,10 +77,12 @@ class ProfileView extends GetView<ProfileController> {
               const Spacer(flex: 3),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 24.w),
-                padding: EdgeInsets.symmetric(vertical: 30.h),
                 width: double.infinity,
+                height: 60.h,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    await controller.pickImage();
+                  },
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all(
                       RoundedRectangleBorder(

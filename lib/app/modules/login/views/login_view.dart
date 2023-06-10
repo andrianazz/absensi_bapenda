@@ -62,6 +62,8 @@ class LoginView extends GetView<LoginController> {
                   SizedBox(height: 6.h),
                   TextFormField(
                     controller: controller.nikC,
+                    keyboardType: TextInputType.number,
+                    maxLength: 16,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Field NIK tidak boleh kosong';

@@ -49,34 +49,39 @@ class HomeView extends GetView<HomeController> {
                       ),
                     ),
                     Obx(
-                      () => Text(
-                        controller.userModel.value.unitKerja?.namaUnitKerja ??
-                            "Tidak Ada Unit",
-                        style: poppins.copyWith(
-                          fontSize: 14.sp,
+                      () => GestureDetector(
+                        onTap: () async {
+                          await controller.logout();
+                        },
+                        child: Text(
+                          controller.userModel.value.unitKerja?.namaUnitKerja ??
+                              "Tidak Ada Unit",
+                          style: poppins.copyWith(
+                            fontSize: 14.sp,
+                          ),
                         ),
                       ),
                     ),
                   ],
                 ),
-                Card(
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(80.r),
-                  ),
-                  child: GestureDetector(
-                    onTap: () async {
-                      await controller.logout();
-                    },
-                    child: Obx(
-                      () => ClipOval(
-                        child: SizedBox(
+                Obx(
+                  () => Card(
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(80.r),
+                    ),
+                    child: GestureDetector(
+                      onTap: () async {},
+                      child: ClipOval(
+                        child: Container(
                           height: 60,
                           width: 60,
-                          child: Center(
-                            child: Image.network(
-                              controller.defaultImage.value,
-                              fit: BoxFit.fill,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                controller.defaultImage.value,
+                              ),
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
@@ -115,6 +120,18 @@ class HomeView extends GetView<HomeController> {
                                 );
                               }
 
+                              if (!snapshot.hasData) {
+                                return Column(
+                                  children: [
+                                    const CircularProgressIndicator(),
+                                    Text(
+                                      "Coba Update Lagi",
+                                      style: poppins.copyWith(fontSize: 8.sp),
+                                    ),
+                                  ],
+                                );
+                              }
+
                               return Column(
                                 children: [
                                   Text(
@@ -146,6 +163,19 @@ class HomeView extends GetView<HomeController> {
                                   child: CircularProgressIndicator(),
                                 );
                               }
+
+                              if (!snapshot.hasData) {
+                                return Column(
+                                  children: [
+                                    const CircularProgressIndicator(),
+                                    Text(
+                                      "Coba Update Lagi",
+                                      style: poppins.copyWith(fontSize: 8.sp),
+                                    ),
+                                  ],
+                                );
+                              }
+
                               return Column(
                                 children: [
                                   Text(
@@ -187,6 +217,19 @@ class HomeView extends GetView<HomeController> {
                                   child: CircularProgressIndicator(),
                                 );
                               }
+
+                              if (!snapshot.hasData) {
+                                return Column(
+                                  children: [
+                                    const CircularProgressIndicator(),
+                                    Text(
+                                      "Coba Update Lagi",
+                                      style: poppins.copyWith(fontSize: 8.sp),
+                                    ),
+                                  ],
+                                );
+                              }
+
                               return Column(
                                 children: [
                                   Text(
@@ -218,6 +261,19 @@ class HomeView extends GetView<HomeController> {
                                   child: CircularProgressIndicator(),
                                 );
                               }
+
+                              if (!snapshot.hasData) {
+                                return Column(
+                                  children: [
+                                    const CircularProgressIndicator(),
+                                    Text(
+                                      "Coba Update Lagi",
+                                      style: poppins.copyWith(fontSize: 8.sp),
+                                    ),
+                                  ],
+                                );
+                              }
+
                               return Column(
                                 children: [
                                   Text(
@@ -298,6 +354,17 @@ class HomeView extends GetView<HomeController> {
                                 return const Center(
                                     child: CircularProgressIndicator());
                               }
+                              if (!snapshot.hasData) {
+                                return Column(
+                                  children: [
+                                    const CircularProgressIndicator(),
+                                    Text(
+                                      "Coba Update Lagi",
+                                      style: poppins.copyWith(fontSize: 8.sp),
+                                    ),
+                                  ],
+                                );
+                              }
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -345,6 +412,14 @@ class HomeView extends GetView<HomeController> {
                             return const Center(
                                 child: CircularProgressIndicator());
                           }
+
+                          if (!snapshot.hasData) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                semanticsValue: "Coba Update Lagi",
+                              ),
+                            );
+                          }
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -382,6 +457,14 @@ class HomeView extends GetView<HomeController> {
                             return const Center(
                                 child: CircularProgressIndicator());
                           }
+
+                          if (!snapshot.hasData) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                semanticsValue: "Coba Update Lagi",
+                              ),
+                            );
+                          }
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -418,6 +501,14 @@ class HomeView extends GetView<HomeController> {
                             ConnectionState.waiting) {
                           return const Center(
                               child: CircularProgressIndicator());
+                        }
+
+                        if (!snapshot.hasData) {
+                          return const Center(
+                            child: CircularProgressIndicator(
+                              semanticsValue: "Coba Update Lagi",
+                            ),
+                          );
                         }
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -480,6 +571,18 @@ class HomeView extends GetView<HomeController> {
                                 return const Center(
                                     child: CircularProgressIndicator());
                               }
+
+                              if (!snapshot.hasData) {
+                                return Column(
+                                  children: [
+                                    const CircularProgressIndicator(),
+                                    Text(
+                                      "Coba Update Lagi",
+                                      style: poppins.copyWith(fontSize: 8.sp),
+                                    ),
+                                  ],
+                                );
+                              }
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -527,6 +630,13 @@ class HomeView extends GetView<HomeController> {
                             return const Center(
                                 child: CircularProgressIndicator());
                           }
+                          if (!snapshot.hasData) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                semanticsValue: "Coba Update Lagi",
+                              ),
+                            );
+                          }
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -564,6 +674,14 @@ class HomeView extends GetView<HomeController> {
                             return const Center(
                                 child: CircularProgressIndicator());
                           }
+
+                          if (!snapshot.hasData) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                semanticsValue: "Coba Update Lagi",
+                              ),
+                            );
+                          }
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -600,6 +718,14 @@ class HomeView extends GetView<HomeController> {
                             ConnectionState.waiting) {
                           return const Center(
                               child: CircularProgressIndicator());
+                        }
+
+                        if (!snapshot.hasData) {
+                          return const Center(
+                            child: CircularProgressIndicator(
+                              semanticsValue: "Coba Update Lagi",
+                            ),
+                          );
                         }
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

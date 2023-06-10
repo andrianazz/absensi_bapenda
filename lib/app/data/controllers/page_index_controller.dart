@@ -340,6 +340,8 @@ class PageIndexController extends GetxController {
                     distanceBapenda.toInt(),
                     status,
                   );
+
+                  Get.offAllNamed(Routes.HOME);
                 },
                 child: const Text("Absen"),
               ),
@@ -381,6 +383,8 @@ class PageIndexController extends GetxController {
                     distanceBapenda.toInt(),
                     status,
                   );
+
+                  Get.offAllNamed(Routes.HOME);
                 },
                 child: const Text("Absen"),
               ),
@@ -424,6 +428,8 @@ class PageIndexController extends GetxController {
                     distanceBapenda.toInt(),
                     status,
                   );
+
+                  Get.offAllNamed(Routes.HOME);
                 },
                 child: const Text("Absen"),
               ),
@@ -464,8 +470,10 @@ class PageIndexController extends GetxController {
                   await pulangC.postPulang(
                     position,
                     distanceBapenda.toInt(),
-                    ' $address',
+                    status,
                   );
+
+                  Get.back();
 
                   Get.offAllNamed(Routes.HOME);
                 },
