@@ -24,6 +24,8 @@ class PageIndexController extends GetxController {
 
   HomeController homeC = Get.put(HomeController());
 
+  RxBool isLoading = false.obs;
+
   RxInt pageIndex = 0.obs;
 
   void changePage(int i) async {
@@ -132,7 +134,34 @@ class PageIndexController extends GetxController {
             ),
           );
         } else {
+          isLoading.value = true;
+
+          //check location is enabled
+          bool isLocationEnabled = await Geolocator.isLocationServiceEnabled();
+          if (!isLocationEnabled) {
+            Get.dialog(
+              AlertDialog(
+                title: const Text("Peringatan"),
+                content: const Text(
+                    "Lokasi anda tidak aktif, Silahkan aktifkan lokasi anda"),
+                actions: [
+                  TextButton(
+                    onPressed: () async {
+                      Get.back();
+                    },
+                    child: const Text("OK"),
+                  ),
+                ],
+              ),
+            );
+            isLoading.value = false;
+            break;
+          }
+
           Map<String, dynamic> dataResponse = await _determinePosition();
+
+          isLoading.value = false;
+
           Position position = dataResponse['position'];
 
           if (dataResponse['error'] == true) {
@@ -190,6 +219,8 @@ class PageIndexController extends GetxController {
       if (distanceUPT1 <= 50) {
         status = "UPT 1";
       } else {
+        isLoading.value = false;
+
         Get.dialog(
           AlertDialog(
             title: const Text("Peringatan"),
@@ -211,6 +242,8 @@ class PageIndexController extends GetxController {
       if (distanceUPT2 <= 50) {
         status = "UPT 2";
       } else {
+        isLoading.value = false;
+
         Get.dialog(
           AlertDialog(
             title: const Text("Peringatan"),
@@ -232,6 +265,8 @@ class PageIndexController extends GetxController {
       if (distanceUPT3 <= 50) {
         status = "UPT 3";
       } else {
+        isLoading.value = false;
+
         Get.dialog(
           AlertDialog(
             title: const Text("Peringatan"),
@@ -253,6 +288,8 @@ class PageIndexController extends GetxController {
       if (distanceUPT4 <= 50) {
         status = "UPT 4";
       } else {
+        isLoading.value = false;
+
         Get.dialog(
           AlertDialog(
             title: const Text("Peringatan"),
@@ -274,6 +311,8 @@ class PageIndexController extends GetxController {
       if (distanceUPT5 <= 50) {
         status = "UPT 5";
       } else {
+        isLoading.value = false;
+
         Get.dialog(
           AlertDialog(
             title: const Text("Peringatan"),
@@ -295,6 +334,8 @@ class PageIndexController extends GetxController {
       if (distanceBapenda <= 100) {
         status = "Bapenda Pekanbaru";
       } else {
+        isLoading.value = false;
+
         Get.dialog(
           AlertDialog(
             title: const Text("Peringatan"),
@@ -348,6 +389,8 @@ class PageIndexController extends GetxController {
             ],
           ),
         );
+
+        isLoading.value = false;
       } else {
         Get.dialog(AlertDialog(
           title: const Text("Peringatan"),
@@ -361,6 +404,8 @@ class PageIndexController extends GetxController {
             ),
           ],
         ));
+
+        isLoading.value = false;
       }
     } else if (isTimeInRangeSiang1()) {
       if (siang1.id == null) {
@@ -391,6 +436,7 @@ class PageIndexController extends GetxController {
             ],
           ),
         );
+        isLoading.value = false;
       } else {
         Get.dialog(
           AlertDialog(
@@ -406,9 +452,12 @@ class PageIndexController extends GetxController {
             ],
           ),
         );
+        isLoading.value = false;
       }
     } else if (isTimeInRangeSiang2()) {
       if (siang2.id == null) {
+        isLoading.value = false;
+
         // await masukC.postMasuk(position, status);
         Get.dialog(
           AlertDialog(
@@ -437,6 +486,8 @@ class PageIndexController extends GetxController {
           ),
         );
       } else {
+        isLoading.value = false;
+
         Get.dialog(
           AlertDialog(
             title: const Text("Peringatan"),
@@ -454,6 +505,8 @@ class PageIndexController extends GetxController {
       }
     } else if (isTimeInRangePulang()) {
       if (pulang.id == null) {
+        isLoading.value = false;
+
         Get.dialog(
           AlertDialog(
             title: const Text("ABSEN PULANG"),
@@ -483,6 +536,8 @@ class PageIndexController extends GetxController {
           ),
         );
       } else {
+        isLoading.value = false;
+
         Get.dialog(
           AlertDialog(
             title: const Text("Peringatan"),

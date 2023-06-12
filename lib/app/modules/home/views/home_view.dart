@@ -766,17 +766,22 @@ class HomeView extends GetView<HomeController> {
       bottomNavigationBar: Obx(
         () => ConvexAppBar(
           height: 60.h,
-          items: const [
-            TabItem(
+          items: [
+            const TabItem(
               icon: Icons.home,
               title: 'Home',
             ),
-            TabItem(icon: Icons.fingerprint, title: 'ABSEN'),
-            TabItem(icon: Icons.people, title: 'Profile'),
+            TabItem(
+                icon: pageC.isLoading.isFalse
+                    ? Icons.fingerprint
+                    : Icons.restore_sharp,
+                title: 'ABSEN'),
+            const TabItem(icon: Icons.people, title: 'Profile'),
           ],
           style: TabStyle.fixedCircle,
           initialActiveIndex: pageC.pageIndex.value,
-          onTap: (int i) => pageC.changePage(i),
+          onTap: (int i) =>
+              pageC.isLoading.isFalse ? pageC.changePage(i) : null,
         ),
       ),
     );

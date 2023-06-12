@@ -18,7 +18,7 @@ class LoginView extends GetView<LoginController> {
           child: ListView(
             padding: EdgeInsets.symmetric(horizontal: 28.w),
             children: [
-              SizedBox(height: 40.h),
+              SizedBox(height: 20.h),
               Image.asset("assets/images/ic_bapenda.png"),
               SizedBox(height: 20.h),
               Column(
@@ -48,7 +48,7 @@ class LoginView extends GetView<LoginController> {
                 width: 176.w,
                 height: 201.h,
               ),
-              SizedBox(height: 30.h),
+              SizedBox(height: 20.h),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -99,7 +99,6 @@ class LoginView extends GetView<LoginController> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 14.h),
                   Text(
                     "Password",
                     style: poppins.copyWith(
@@ -160,7 +159,7 @@ class LoginView extends GetView<LoginController> {
                   ),
                 ],
               ),
-              SizedBox(height: 40.h),
+              SizedBox(height: 30.h),
               Obx(
                 () => ElevatedButton(
                   style: ButtonStyle(
