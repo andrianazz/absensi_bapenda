@@ -50,9 +50,7 @@ class HomeView extends GetView<HomeController> {
                     ),
                     Obx(
                       () => GestureDetector(
-                        onTap: () async {
-                          await controller.logout();
-                        },
+                        onTap: () async {},
                         child: Text(
                           controller.userModel.value.unitKerja?.namaUnitKerja ??
                               "Tidak Ada Unit",

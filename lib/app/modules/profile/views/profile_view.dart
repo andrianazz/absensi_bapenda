@@ -4,6 +4,7 @@ import 'package:absensi_bapenda/theme/style.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:get/get.dart';
 
@@ -59,9 +60,7 @@ class ProfileView extends GetView<ProfileController> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () async {
-                        await homeC.logout();
-                      },
+                      onTap: () async {},
                       child: Text(
                         homeC.userModel.value.unitKerja?.namaUnitKerja! ??
                             "Tidak ada Unit Kerja",
@@ -100,6 +99,21 @@ class ProfileView extends GetView<ProfileController> {
                 ),
               ),
               const Spacer(flex: 2),
+              Center(
+                child: GestureDetector(
+                  onTap: () async {
+                    launchUrl(Uri.parse("github.com/andrianazz"));
+                  },
+                  child: Text(
+                    "Versi 1.0.0",
+                    style: poppins.copyWith(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+              const Spacer(flex: 1),
             ],
           ),
         ),
