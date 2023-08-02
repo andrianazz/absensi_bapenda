@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "absensi_bapenda" "\0"
+            VALUE "FileDescription", "Absensi Pegawai BAPENDA" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "absensi_bapenda" "\0"
+            VALUE "InternalName", "Absensi Pegawai BAPENDA" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
             VALUE "OriginalFilename", "absensi_bapenda.exe" "\0"
-            VALUE "ProductName", "absensi_bapenda" "\0"
+            VALUE "ProductName", "Absensi Pegawai BAPENDA" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

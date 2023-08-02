@@ -14,6 +14,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:absensi_bapenda/app/routes/app_pages.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class PageIndexController extends GetxController {
   MasukController masukC = Get.put(MasukController());
@@ -148,6 +149,7 @@ class PageIndexController extends GetxController {
                   TextButton(
                     onPressed: () async {
                       Get.back();
+                      await Permission.location.request();
                     },
                     child: const Text("OK"),
                   ),
