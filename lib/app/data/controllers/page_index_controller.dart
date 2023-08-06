@@ -199,6 +199,10 @@ class PageIndexController extends GetxController {
   }
 
   Future<void> presence(Position position, String address) async {
+    //Tes jarak dari Rumah
+    // double distanceBapenda = Geolocator.distanceBetween(
+    //     position.latitude, position.longitude, 0.5475012, 101.426372);
+
     //Koordinat setiap UPT dan Bapenda
     double distanceBapenda = Geolocator.distanceBetween(
         position.latitude, position.longitude, 0.523141, 101.440834);
@@ -215,6 +219,81 @@ class PageIndexController extends GetxController {
 
     //Status sebagai jalan / kantor
     String status = address;
+
+    if (isTimeInRangePagi()) {
+      if (distanceBapenda <= 100) {
+        status = "Bapenda Pekanbaru";
+      } else {
+        isLoading.value = false;
+
+        // print(
+        //     "latitude : ${position.latitude} longitude : ${position.longitude}");
+
+        Get.dialog(
+          AlertDialog(
+            title: const Text("Peringatan"),
+            content: const Text(
+                "Anda berada diluar jarak kantor Bapenda, Silahkan melakukan absen pada lokasi yang telah ditentukan"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
+
+      Masuk masuk = await masukC.getMasukToday();
+      if (masuk.id == null) {
+        Get.dialog(
+          AlertDialog(
+            title: const Text("ABSEN MASUK"),
+            content: const Text("Apakah anda ingin melakukan absen masuk"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text("Tidak"),
+              ),
+              TextButton(
+                onPressed: () async {
+                  await masukC.postMasuk(
+                    position,
+                    distanceBapenda.toInt(),
+                    status,
+                  );
+
+                  Get.offAllNamed(Routes.HOME);
+                },
+                child: const Text("Absen"),
+              ),
+            ],
+          ),
+        );
+
+        isLoading.value = false;
+      } else {
+        Get.dialog(AlertDialog(
+          title: const Text("Peringatan"),
+          content: const Text("Anda sudah melakukan absen masuk"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        ));
+
+        isLoading.value = false;
+      }
+    }
 
     //Codition jika diluar jarak kantor
     if (homeC.userModel.value.unitKerjaId == 1) {
@@ -337,6 +416,9 @@ class PageIndexController extends GetxController {
         status = "Bapenda Pekanbaru";
       } else {
         isLoading.value = false;
+
+        // print(
+        //     "latitude : ${position.latitude} longitude : ${position.longitude}");
 
         Get.dialog(
           AlertDialog(
