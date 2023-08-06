@@ -226,9 +226,6 @@ class PageIndexController extends GetxController {
       } else {
         isLoading.value = false;
 
-        // print(
-        //     "latitude : ${position.latitude} longitude : ${position.longitude}");
-
         Get.dialog(
           AlertDialog(
             title: const Text("Peringatan"),
@@ -293,6 +290,7 @@ class PageIndexController extends GetxController {
 
         isLoading.value = false;
       }
+      return;
     }
 
     //Codition jika diluar jarak kantor
