@@ -211,6 +211,10 @@ class PageIndexController extends GetxController {
     // double distanceBapenda = Geolocator.distanceBetween(
     //     position.latitude, position.longitude, 0.5475012, 101.426372);
 
+    //Tes jarak dari Kos
+    // double distanceBapenda = Geolocator.distanceBetween(
+    //     position.latitude, position.longitude, 0.4839369, 101.4083992);
+
     //Koordinat setiap UPT dan Bapenda
     double distanceBapenda = Geolocator.distanceBetween(
         position.latitude, position.longitude, 0.523141, 101.440834);
