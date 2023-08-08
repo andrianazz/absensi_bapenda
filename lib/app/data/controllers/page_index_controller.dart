@@ -137,25 +137,33 @@ class PageIndexController extends GetxController {
         } else {
           isLoading.value = true;
 
+          //check location is granted
+          var status = await Permission.location.status;
+          if (!status.isGranted) {
+            await Permission.location.request();
+          }
+
           //check location is enabled
           bool isLocationEnabled = await Geolocator.isLocationServiceEnabled();
           if (!isLocationEnabled) {
             Get.dialog(
               AlertDialog(
-                title: const Text("Peringatan"),
+                title: const Text("Pemberitahuan"),
                 content: const Text(
-                    "Lokasi anda tidak aktif, Silahkan aktifkan lokasi anda"),
+                    "Aplikasi ini menggunakan  Lokasi hanya berfungsi untuk memastikan anda berada di area perkantoran Bapenda Pekanbaru, Silahkan aktifkan lokasi anda"),
                 actions: [
                   TextButton(
                     onPressed: () async {
                       Get.back();
-                      await Permission.location.request();
+                      // await Permission.location.request();
+                      Geolocator.openLocationSettings();
                     },
                     child: const Text("OK"),
                   ),
                 ],
               ),
             );
+
             isLoading.value = false;
             break;
           }
