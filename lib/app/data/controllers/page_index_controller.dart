@@ -150,7 +150,7 @@ class PageIndexController extends GetxController {
               AlertDialog(
                 title: const Text("Pemberitahuan"),
                 content: const Text(
-                    "Aplikasi ini menggunakan  Lokasi hanya berfungsi untuk memastikan anda berada di area perkantoran Bapenda Pekanbaru, Silahkan aktifkan lokasi anda"),
+                    "Aplikasi Presensi ini mengambil data lokasi guna menentukan titik kehahadiran Anda di area kantor. Data lokasi hanya diambil pada saat aplikasi digunakan dan tidak dibagikan kepada pihak manapun."),
                 actions: [
                   TextButton(
                     onPressed: () async {
@@ -232,6 +232,7 @@ class PageIndexController extends GetxController {
     //Status sebagai jalan / kantor
     String status = address;
 
+    //Cek apakah Jam absen
     if (isTimeInRangePagi()) {
       if (distanceBapenda <= 100) {
         status = "Bapenda Pekanbaru";
