@@ -9,7 +9,10 @@ import 'package:absensi_bapenda/app/data/models/pulang_model.dart';
 import 'package:absensi_bapenda/app/data/models/siang1_model.dart';
 import 'package:absensi_bapenda/app/data/models/siang2_model.dart';
 import 'package:absensi_bapenda/app/modules/home/controllers/home_controller.dart';
+import 'package:absensi_bapenda/theme/color.dart';
+import 'package:absensi_bapenda/theme/style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -137,28 +140,48 @@ class PageIndexController extends GetxController {
         } else {
           isLoading.value = true;
 
-          //check location is granted
-          var status = await Permission.location.status;
-          if (!status.isGranted) {
-            await Permission.location.request();
-          }
-
           //check location is enabled
           bool isLocationEnabled = await Geolocator.isLocationServiceEnabled();
           if (!isLocationEnabled) {
             Get.dialog(
               AlertDialog(
-                title: const Text("Pemberitahuan"),
-                content: const Text(
-                    "Aplikasi Presensi ini mengambil data lokasi guna menentukan titik kehahadiran Anda di area kantor. Data lokasi hanya diambil pada saat aplikasi digunakan dan tidak dibagikan kepada pihak manapun."),
+                title: const Text("Perizinan Lokasi"),
+                content: Column(
+                  children: [
+                    Text(
+                      "Untuk melihat titik lokasi, izinkan aplikasi absensi bapenda untuk menggunakan lokasi saat aplikasi sedang digunakan \n\nAplikasi Absensi Bapenda mengumpulkan data lokasi untuk mengidentifikasi kehadiran anda di kantor. Data lokasi hanya diambil saat aplikasi digunakan dan tidak dibagikan ke pihak manapun",
+                      style: poppins.copyWith(fontSize: 14.sp),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 10.h),
+                    Image.asset("assets/images/icon-location.jpg")
+                  ],
+                ),
                 actions: [
                   TextButton(
                     onPressed: () async {
                       Get.back();
+                    },
+                    child: Text(
+                      "Tolak",
+                      style: TextStyle(color: blueButtonColor),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      Get.back();
                       // await Permission.location.request();
+                      var status = await Permission.location.status;
+                      if (!status.isGranted) {
+                        await Permission.location.request();
+                      }
+
                       Geolocator.openLocationSettings();
                     },
-                    child: const Text("OK"),
+                    child: Text(
+                      "Izinkan",
+                      style: TextStyle(color: blueButtonColor),
+                    ),
                   ),
                 ],
               ),
