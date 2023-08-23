@@ -333,7 +333,7 @@ class PageIndexController extends GetxController {
 
     //Codition jika diluar jarak kantor
     if (homeC.userModel.value.unitKerjaId == 1) {
-      if (distanceUPT1 <= 50) {
+      if (distanceUPT1 <= 30) {
         status = "UPT 1";
       } else {
         isLoading.value = false;
@@ -356,7 +356,7 @@ class PageIndexController extends GetxController {
         return;
       }
     } else if (homeC.userModel.value.unitKerjaId == 2) {
-      if (distanceUPT2 <= 50) {
+      if (distanceUPT2 <= 30) {
         status = "UPT 2";
       } else {
         isLoading.value = false;
@@ -379,7 +379,7 @@ class PageIndexController extends GetxController {
         return;
       }
     } else if (homeC.userModel.value.unitKerjaId == 3) {
-      if (distanceUPT3 <= 50) {
+      if (distanceUPT3 <= 30) {
         status = "UPT 3";
       } else {
         isLoading.value = false;
@@ -402,7 +402,7 @@ class PageIndexController extends GetxController {
         return;
       }
     } else if (homeC.userModel.value.unitKerjaId == 4) {
-      if (distanceUPT4 <= 50) {
+      if (distanceUPT4 <= 30) {
         status = "UPT 4";
       } else {
         isLoading.value = false;
@@ -425,7 +425,7 @@ class PageIndexController extends GetxController {
         return;
       }
     } else if (homeC.userModel.value.unitKerjaId == 5) {
-      if (distanceUPT5 <= 50) {
+      if (distanceUPT5 <= 30) {
         status = "UPT 5";
       } else {
         isLoading.value = false;
