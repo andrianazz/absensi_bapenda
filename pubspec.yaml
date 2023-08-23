@@ -21,6 +21,7 @@ dependencies:
   restart_app: 1.2.1
   url_launcher: 6.1.11
   permission_handler: 10.4.3
+  in_app_update: 4.1.4
   flutter: 
     sdk: flutter
 
