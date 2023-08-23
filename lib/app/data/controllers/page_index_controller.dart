@@ -145,16 +145,16 @@ class PageIndexController extends GetxController {
           if (!isLocationEnabled) {
             Get.dialog(
               AlertDialog(
-                title: const Text("Perizinan Lokasi"),
+                title: const Text("Location Permits"),
                 content: Column(
                   children: [
                     Text(
-                      "Untuk melihat titik lokasi, izinkan aplikasi absensi bapenda untuk menggunakan lokasi saat aplikasi sedang digunakan \n\nAplikasi Absensi Bapenda mengumpulkan data lokasi untuk mengidentifikasi kehadiran anda di kantor. Data lokasi hanya diambil saat aplikasi digunakan dan tidak dibagikan ke pihak manapun",
+                      "To see the location point, allow the Bapenda attendance application to use the location, the location will not be accessed when the application is not used. \n\nThe Bapenda attendance application collects location data to identify your presence at the office. Location data is only collected when the application is used and used for internal bapenda office",
                       style: poppins.copyWith(fontSize: 14.sp),
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 10.h),
-                    Image.asset("assets/images/icon-location.jpg")
+                    Image.asset("assets/images/icon-location.jpg", width: 200.w)
                   ],
                 ),
                 actions: [
@@ -163,7 +163,7 @@ class PageIndexController extends GetxController {
                       Get.back();
                     },
                     child: Text(
-                      "Tolak",
+                      "Deny",
                       style: TextStyle(color: blueButtonColor),
                     ),
                   ),
@@ -179,7 +179,7 @@ class PageIndexController extends GetxController {
                       Geolocator.openLocationSettings();
                     },
                     child: Text(
-                      "Izinkan",
+                      "Allow",
                       style: TextStyle(color: blueButtonColor),
                     ),
                   ),
@@ -255,9 +255,9 @@ class PageIndexController extends GetxController {
     //Status sebagai jalan / kantor
     String status = address;
 
-    //Cek apakah Jam absen
+    //Cek apakah Jam absen pagi
     if (isTimeInRangePagi()) {
-      if (distanceBapenda <= 100) {
+      if (distanceBapenda <= 50) {
         status = "Bapenda Pekanbaru";
       } else {
         isLoading.value = false;
@@ -310,6 +310,8 @@ class PageIndexController extends GetxController {
         );
 
         isLoading.value = false;
+
+        return;
       } else {
         Get.dialog(AlertDialog(
           title: const Text("Peringatan"),
@@ -446,7 +448,7 @@ class PageIndexController extends GetxController {
         return;
       }
     } else if (homeC.userModel.value.unitKerjaId! >= 6) {
-      if (distanceBapenda <= 100) {
+      if (distanceBapenda <= 50) {
         status = "Bapenda Pekanbaru";
       } else {
         isLoading.value = false;
