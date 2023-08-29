@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:in_app_update/in_app_update.dart';
 
 import 'package:get/get.dart';
+import 'package:in_app_update/in_app_update.dart';
 
 import 'app/routes/app_pages.dart';
 
-void main() {
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   InAppUpdate.checkForUpdate().then((updateInfo) {
     print(updateInfo);
     if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
