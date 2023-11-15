@@ -57,17 +57,17 @@ class ProfileController extends GetxController {
         'nik': homeC.userModel.value.nik,
       });
 
-      print(url);
+      // print(url);
       await dio.post(url, data: formData);
 
-      print('Image uploaded successfully');
+      // print('Image uploaded successfully');
 
       // set prefuser and change attibute imageUrl
       homeC.userModel.value.imageUrl = "";
       homeC.userModel.value.imageUrl = '${homeC.userModel.value.nik}.jpg';
       homeC.mapUser['data']['imageUrl'] = homeC.userModel.value.imageUrl;
 
-      print((homeC.mapUser['data']));
+      // print((homeC.mapUser['data']));
 
       String user = jsonEncode({'data': homeC.mapUser['data']});
 
@@ -79,7 +79,7 @@ class ProfileController extends GetxController {
 
       // Restart.restartApp(webOrigin: Routes.HOME);
     } catch (error) {
-      print('Failed to upload image: $error');
+      // print('Failed to upload image: $error');
     }
   }
 }

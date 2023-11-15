@@ -10,7 +10,6 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   InAppUpdate.checkForUpdate().then((updateInfo) {
-    print(updateInfo);
     if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
       if (updateInfo.immediateUpdateAllowed) {
         // Perform immediate update

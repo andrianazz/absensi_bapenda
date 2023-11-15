@@ -38,7 +38,7 @@ class LoginController extends GetxController {
         ),
       );
 
-      print("Response Login : ${response.statusCode}");
+      // print("Response Login : ${response.statusCode}");
 
       if (response.statusCode == 200) {
         var data = response.data;

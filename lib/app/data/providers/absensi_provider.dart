@@ -7,8 +7,9 @@ class AbsensiProvider extends GetConnect {
   void onInit() {
     httpClient.defaultDecoder = (map) {
       if (map is Map<String, dynamic>) return Absensi.fromJson(map);
-      if (map is List)
+      if (map is List) {
         return map.map((item) => Absensi.fromJson(item)).toList();
+      }
     };
     httpClient.baseUrl = 'YOUR-API-URL';
   }

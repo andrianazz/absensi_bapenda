@@ -46,7 +46,7 @@ class PageIndexController extends GetxController {
         //Cek Absensi hari ini
         Absensi absensi = await absensiC.getAbsensiToday();
         if (absensi.id == null) {
-          print("hari ini belum ada");
+          // print("hari ini belum ada");
           await absensiC.createAbsensiToday();
         }
 
@@ -225,8 +225,8 @@ class PageIndexController extends GetxController {
   }
 
   Future<void> updatePosition(Position position, String address) async {
-    print("updatePosition: $position");
-    print("address: $address");
+    // print("updatePosition: $position");
+    // print("address: $address");
   }
 
   Future<void> presence(Position position, String address) async {

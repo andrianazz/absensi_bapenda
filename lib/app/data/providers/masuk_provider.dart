@@ -20,7 +20,7 @@ class MasukProvider extends GetConnect {
 
   Future<Masuk?> getMasuk(int id) async {
     final response = await get('masuk/$id');
-    print((response.body as Masuk).toJson());
+    // print((response.body as Masuk).toJson());
     return response.body;
   }
 
