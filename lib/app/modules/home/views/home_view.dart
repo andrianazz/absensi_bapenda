@@ -122,9 +122,8 @@ class HomeView extends GetView<HomeController> {
                               if (!snapshot.hasData) {
                                 return Column(
                                   children: [
-                                    const CircularProgressIndicator(),
                                     Text(
-                                      "Coba Update Lagi",
+                                      "Terjadi Kesalahan",
                                       style: poppins.copyWith(fontSize: 8.sp),
                                     ),
                                   ],
@@ -166,9 +165,8 @@ class HomeView extends GetView<HomeController> {
                               if (!snapshot.hasData) {
                                 return Column(
                                   children: [
-                                    const CircularProgressIndicator(),
                                     Text(
-                                      "Coba Update Lagi",
+                                      "Terjadi Kesalahan",
                                       style: poppins.copyWith(fontSize: 8.sp),
                                     ),
                                   ],
@@ -220,9 +218,8 @@ class HomeView extends GetView<HomeController> {
                               if (!snapshot.hasData) {
                                 return Column(
                                   children: [
-                                    const CircularProgressIndicator(),
                                     Text(
-                                      "Coba Update Lagi",
+                                      "Terjadi Kesalahan",
                                       style: poppins.copyWith(fontSize: 8.sp),
                                     ),
                                   ],
@@ -264,9 +261,8 @@ class HomeView extends GetView<HomeController> {
                               if (!snapshot.hasData) {
                                 return Column(
                                   children: [
-                                    const CircularProgressIndicator(),
                                     Text(
-                                      "Coba Update Lagi",
+                                      "Terjadi Kesalahan",
                                       style: poppins.copyWith(fontSize: 8.sp),
                                     ),
                                   ],
@@ -345,53 +341,83 @@ class HomeView extends GetView<HomeController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        FutureBuilder<Masuk>(
-                            future: masukC.getMasukwithUserId(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                    child: CircularProgressIndicator());
-                              }
-                              if (!snapshot.hasData) {
-                                return Column(
-                                  children: [
-                                    const CircularProgressIndicator(),
-                                    Text(
-                                      "Coba Update Lagi",
-                                      style: poppins.copyWith(fontSize: 8.sp),
-                                    ),
-                                  ],
-                                );
-                              }
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Absen Pagi",
-                                    style: poppins.copyWith(
-                                      fontSize: 14.sp,
-                                      color: textBlueColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    snapshot.data!.jamMasuk ?? "-",
-                                    style: poppins.copyWith(
-                                      fontSize: 14.sp,
-                                      color: textBlueColor,
-                                    ),
-                                  ),
-                                  Text(
-                                    snapshot.data!.status ?? "-",
-                                    style: poppins.copyWith(
-                                      fontSize: 14.sp,
-                                      color: textBlueColor,
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }),
+                        Obx(
+                          () => Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Absen Pagi",
+                                style: poppins.copyWith(
+                                  fontSize: 14.sp,
+                                  color: textBlueColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                masukC.mapFetchToday['jam_masuk'] ?? "-",
+                                style: poppins.copyWith(
+                                  fontSize: 14.sp,
+                                  color: textBlueColor,
+                                ),
+                              ),
+                              Text(
+                                masukC.mapFetchToday['status'] ?? "-",
+                                style: poppins.copyWith(
+                                  fontSize: 14.sp,
+                                  color: textBlueColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // FutureBuilder<Masuk>(
+                        //   future: masukC.getMasukwithUserId(),
+                        //   builder: (context, snapshot) {
+                        //     if (snapshot.connectionState ==
+                        //         ConnectionState.waiting) {
+                        //       return const Center(
+                        //           child: CircularProgressIndicator());
+                        //     }
+                        //     if (!snapshot.hasData) {
+                        //       return Column(
+                        //         children: [
+                        //           const CircularProgressIndicator(),
+                        //           Text(
+                        //             "Coba Update Lagi",
+                        //             style: poppins.copyWith(fontSize: 8.sp),
+                        //           ),
+                        //         ],
+                        //       );
+                        //     }
+                        //     return Column(
+                        //       crossAxisAlignment: CrossAxisAlignment.start,
+                        //       children: [
+                        //         Text(
+                        //           "Absen Pagi",
+                        //           style: poppins.copyWith(
+                        //             fontSize: 14.sp,
+                        //             color: textBlueColor,
+                        //             fontWeight: FontWeight.bold,
+                        //           ),
+                        //         ),
+                        //         Text(
+                        //           snapshot.data!.jamMasuk ?? "-",
+                        //           style: poppins.copyWith(
+                        //             fontSize: 14.sp,
+                        //             color: textBlueColor,
+                        //           ),
+                        //         ),
+                        //         Text(
+                        //           snapshot.data!.status ?? "-",
+                        //           style: poppins.copyWith(
+                        //             fontSize: 14.sp,
+                        //             color: textBlueColor,
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     );
+                        //   },
+                        // ),
                         Text(
                           controller.today,
                           style: poppins.copyWith(
@@ -403,117 +429,86 @@ class HomeView extends GetView<HomeController> {
                       ],
                     ),
                     SizedBox(height: 20.h),
-                    FutureBuilder<Siang1>(
-                        future: siang1C.getSiang1withUserId(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          }
-
-                          if (!snapshot.hasData) {
-                            return const Center(
-                              child: CircularProgressIndicator(
-                                semanticsValue: "Coba Update Lagi",
-                              ),
-                            );
-                          }
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Absen Siang 1",
-                                style: poppins.copyWith(
-                                  fontSize: 14.sp,
-                                  color: textBlueColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                snapshot.data!.jamSiang ?? "-",
-                                style: poppins.copyWith(
-                                  fontSize: 14.sp,
-                                  color: textBlueColor,
-                                ),
-                              ),
-                              Text(
-                                snapshot.data!.status ?? "-",
-                                style: poppins.copyWith(
-                                  fontSize: 14.sp,
-                                  color: textBlueColor,
-                                ),
-                              ),
-                            ],
-                          );
-                        }),
-                    SizedBox(height: 20.h),
-                    FutureBuilder<Siang2>(
-                        future: siang2C.getSiang2withUserId(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          }
-
-                          if (!snapshot.hasData) {
-                            return const Center(
-                              child: CircularProgressIndicator(
-                                semanticsValue: "Coba Update Lagi",
-                              ),
-                            );
-                          }
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Absen Siang 2",
-                                style: poppins.copyWith(
-                                  fontSize: 14.sp,
-                                  color: textBlueColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                snapshot.data!.jamSiang2 ?? "-",
-                                style: poppins.copyWith(
-                                  fontSize: 14.sp,
-                                  color: textBlueColor,
-                                ),
-                              ),
-                              Text(
-                                snapshot.data!.status ?? "-",
-                                style: poppins.copyWith(
-                                  fontSize: 14.sp,
-                                  color: textBlueColor,
-                                ),
-                              ),
-                            ],
-                          );
-                        }),
-                    SizedBox(height: 20.h),
-                    FutureBuilder<Pulang>(
-                      future: pulangC.getPulangwithUserId(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-
-                        if (!snapshot.hasData) {
-                          return const Center(
-                            child: CircularProgressIndicator(
-                              semanticsValue: "Coba Update Lagi",
+                    Obx(
+                      () => Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Absen Siang 1",
+                            style: poppins.copyWith(
+                              fontSize: 14.sp,
+                              color: textBlueColor,
+                              fontWeight: FontWeight.bold,
                             ),
-                          );
-                        }
-                        return Column(
+                          ),
+                          Text(
+                            siang1C.mapSiang1FetchToday['jam_siang'] ?? "-",
+                            style: poppins.copyWith(
+                              fontSize: 14.sp,
+                              color: textBlueColor,
+                            ),
+                          ),
+                          Text(
+                            siang1C.mapSiang1FetchToday['status'] ?? "-",
+                            style: poppins.copyWith(
+                              fontSize: 14.sp,
+                              color: textBlueColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // FutureBuilder<Siang1>(
+                    //   future: siang1C.getSiang1withUserId(),
+                    //   builder: (context, snapshot) {
+                    //     if (snapshot.connectionState ==
+                    //         ConnectionState.waiting) {
+                    //       return const Center(
+                    //           child: CircularProgressIndicator());
+                    //     }
+
+                    //     if (!snapshot.hasData) {
+                    //       return const Center(
+                    //         child: CircularProgressIndicator(
+                    //           semanticsValue: "Coba Update Lagi",
+                    //         ),
+                    //       );
+                    //     }
+                    //     return Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: [
+                    //         Text(
+                    //           "Absen Siang 1",
+                    //           style: poppins.copyWith(
+                    //             fontSize: 14.sp,
+                    //             color: textBlueColor,
+                    //             fontWeight: FontWeight.bold,
+                    //           ),
+                    //         ),
+                    //         Text(
+                    //           snapshot.data!.jamSiang ?? "-",
+                    //           style: poppins.copyWith(
+                    //             fontSize: 14.sp,
+                    //             color: textBlueColor,
+                    //           ),
+                    //         ),
+                    //         Text(
+                    //           snapshot.data!.status ?? "-",
+                    //           style: poppins.copyWith(
+                    //             fontSize: 14.sp,
+                    //             color: textBlueColor,
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     );
+                    //   },
+                    // ),
+                    SizedBox(height: 20.h),
+                    Obx(() => Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Absen Pulang",
+                              "Absen Siang 2",
                               style: poppins.copyWith(
                                 fontSize: 14.sp,
                                 color: textBlueColor,
@@ -521,23 +516,141 @@ class HomeView extends GetView<HomeController> {
                               ),
                             ),
                             Text(
-                              snapshot.data!.jamPulang ?? "-",
+                              siang2C.mapSiang2FetchToday['jam_siang2'] ?? "-",
                               style: poppins.copyWith(
                                 fontSize: 14.sp,
                                 color: textBlueColor,
                               ),
                             ),
                             Text(
-                              snapshot.data!.status ?? "-",
+                              siang2C.mapSiang2FetchToday['status'] ?? "-",
                               style: poppins.copyWith(
                                 fontSize: 14.sp,
                                 color: textBlueColor,
                               ),
                             ),
                           ],
-                        );
-                      },
+                        )),
+                    // FutureBuilder<Siang2>(
+                    //   future: siang2C.getSiang2withUserId(),
+                    //   builder: (context, snapshot) {
+                    //     if (snapshot.connectionState ==
+                    //         ConnectionState.waiting) {
+                    //       return const Center(
+                    //           child: CircularProgressIndicator());
+                    //     }
+
+                    //     if (!snapshot.hasData) {
+                    //       return const Center(
+                    //         child: CircularProgressIndicator(
+                    //           semanticsValue: "Coba Update Lagi",
+                    //         ),
+                    //       );
+                    //     }
+                    //     return Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: [
+                    //         Text(
+                    //           "Absen Siang 2",
+                    //           style: poppins.copyWith(
+                    //             fontSize: 14.sp,
+                    //             color: textBlueColor,
+                    //             fontWeight: FontWeight.bold,
+                    //           ),
+                    //         ),
+                    //         Text(
+                    //           snapshot.data!.jamSiang2 ?? "-",
+                    //           style: poppins.copyWith(
+                    //             fontSize: 14.sp,
+                    //             color: textBlueColor,
+                    //           ),
+                    //         ),
+                    //         Text(
+                    //           snapshot.data!.status ?? "-",
+                    //           style: poppins.copyWith(
+                    //             fontSize: 14.sp,
+                    //             color: textBlueColor,
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     );
+                    //   },
+                    // ),
+                    SizedBox(height: 20.h),
+                    Obx(
+                      () => Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Absen Pulang",
+                            style: poppins.copyWith(
+                              fontSize: 14.sp,
+                              color: textBlueColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            pulangC.mapPulangFetchToday['jam_pulang'] ?? "-",
+                            style: poppins.copyWith(
+                              fontSize: 14.sp,
+                              color: textBlueColor,
+                            ),
+                          ),
+                          Text(
+                            pulangC.mapPulangFetchToday['status'] ?? "-",
+                            style: poppins.copyWith(
+                              fontSize: 14.sp,
+                              color: textBlueColor,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
+                    // FutureBuilder<Pulang>(
+                    //   future: pulangC.getPulangwithUserId(),
+                    //   builder: (context, snapshot) {
+                    //     if (snapshot.connectionState ==
+                    //         ConnectionState.waiting) {
+                    //       return const Center(
+                    //           child: CircularProgressIndicator());
+                    //     }
+
+                    //     if (!snapshot.hasData) {
+                    //       return const Center(
+                    //         child: CircularProgressIndicator(
+                    //           semanticsValue: "Coba Update Lagi",
+                    //         ),
+                    //       );
+                    //     }
+                    //     return Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: [
+                    //         Text(
+                    //           "Absen Pulang",
+                    //           style: poppins.copyWith(
+                    //             fontSize: 14.sp,
+                    //             color: textBlueColor,
+                    //             fontWeight: FontWeight.bold,
+                    //           ),
+                    //         ),
+                    //         Text(
+                    //           snapshot.data!.jamPulang ?? "-",
+                    //           style: poppins.copyWith(
+                    //             fontSize: 14.sp,
+                    //             color: textBlueColor,
+                    //           ),
+                    //         ),
+                    //         Text(
+                    //           snapshot.data!.status ?? "-",
+                    //           style: poppins.copyWith(
+                    //             fontSize: 14.sp,
+                    //             color: textBlueColor,
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     );
+                    //   },
+                    // ),
                   ],
                 ),
               ),
@@ -562,54 +675,84 @@ class HomeView extends GetView<HomeController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        FutureBuilder<Masuk>(
-                            future: masukC.getMasukYesterday(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                    child: CircularProgressIndicator());
-                              }
+                        Obx(
+                          () => Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Absen Pagi",
+                                style: poppins.copyWith(
+                                  fontSize: 14.sp,
+                                  color: textBlueColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                masukC.mapFetchYesterday['jam_masuk'] ?? "-",
+                                style: poppins.copyWith(
+                                  fontSize: 14.sp,
+                                  color: textBlueColor,
+                                ),
+                              ),
+                              Text(
+                                masukC.mapFetchYesterday['status'] ?? "-",
+                                style: poppins.copyWith(
+                                  fontSize: 14.sp,
+                                  color: textBlueColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // FutureBuilder<Masuk>(
+                        //   future: masukC.getMasukYesterday(),
+                        //   builder: (context, snapshot) {
+                        //     if (snapshot.connectionState ==
+                        //         ConnectionState.waiting) {
+                        //       return const Center(
+                        //           child: CircularProgressIndicator());
+                        //     }
 
-                              if (!snapshot.hasData) {
-                                return Column(
-                                  children: [
-                                    const CircularProgressIndicator(),
-                                    Text(
-                                      "Coba Update Lagi",
-                                      style: poppins.copyWith(fontSize: 8.sp),
-                                    ),
-                                  ],
-                                );
-                              }
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Absen Pagi",
-                                    style: poppins.copyWith(
-                                      fontSize: 14.sp,
-                                      color: textBlueColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    snapshot.data!.jamMasuk ?? "-",
-                                    style: poppins.copyWith(
-                                      fontSize: 14.sp,
-                                      color: textBlueColor,
-                                    ),
-                                  ),
-                                  Text(
-                                    snapshot.data!.status ?? "-",
-                                    style: poppins.copyWith(
-                                      fontSize: 14.sp,
-                                      color: textBlueColor,
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }),
+                        //     if (!snapshot.hasData) {
+                        //       return Column(
+                        //         children: [
+                        //           const CircularProgressIndicator(),
+                        //           Text(
+                        //             "Coba Update Lagi",
+                        //             style: poppins.copyWith(fontSize: 8.sp),
+                        //           ),
+                        //         ],
+                        //       );
+                        //     }
+                        //     return Column(
+                        //       crossAxisAlignment: CrossAxisAlignment.start,
+                        //       children: [
+                        //         Text(
+                        //           "Absen Pagi",
+                        //           style: poppins.copyWith(
+                        //             fontSize: 14.sp,
+                        //             color: textBlueColor,
+                        //             fontWeight: FontWeight.bold,
+                        //           ),
+                        //         ),
+                        //         Text(
+                        //           snapshot.data!.jamMasuk ?? "-",
+                        //           style: poppins.copyWith(
+                        //             fontSize: 14.sp,
+                        //             color: textBlueColor,
+                        //           ),
+                        //         ),
+                        //         Text(
+                        //           snapshot.data!.status ?? "-",
+                        //           style: poppins.copyWith(
+                        //             fontSize: 14.sp,
+                        //             color: textBlueColor,
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     );
+                        //   },
+                        // ),
                         Text(
                           controller.yesterday,
                           style: poppins.copyWith(
@@ -621,116 +764,85 @@ class HomeView extends GetView<HomeController> {
                       ],
                     ),
                     SizedBox(height: 20.h),
-                    FutureBuilder<Siang1>(
-                        future: siang1C.getSiang1Yesterday(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          }
-                          if (!snapshot.hasData) {
-                            return const Center(
-                              child: CircularProgressIndicator(
-                                semanticsValue: "Coba Update Lagi",
-                              ),
-                            );
-                          }
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Absen Siang 1",
-                                style: poppins.copyWith(
-                                  fontSize: 14.sp,
-                                  color: textBlueColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                snapshot.data!.jamSiang ?? "-",
-                                style: poppins.copyWith(
-                                  fontSize: 14.sp,
-                                  color: textBlueColor,
-                                ),
-                              ),
-                              Text(
-                                snapshot.data!.status ?? "-",
-                                style: poppins.copyWith(
-                                  fontSize: 14.sp,
-                                  color: textBlueColor,
-                                ),
-                              ),
-                            ],
-                          );
-                        }),
-                    SizedBox(height: 20.h),
-                    FutureBuilder<Siang2>(
-                        future: siang2C.getSiang2Yesterday(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          }
-
-                          if (!snapshot.hasData) {
-                            return const Center(
-                              child: CircularProgressIndicator(
-                                semanticsValue: "Coba Update Lagi",
-                              ),
-                            );
-                          }
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Absen Siang 2",
-                                style: poppins.copyWith(
-                                  fontSize: 14.sp,
-                                  color: textBlueColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                snapshot.data!.jamSiang2 ?? "-",
-                                style: poppins.copyWith(
-                                  fontSize: 14.sp,
-                                  color: textBlueColor,
-                                ),
-                              ),
-                              Text(
-                                snapshot.data!.status ?? "-",
-                                style: poppins.copyWith(
-                                  fontSize: 14.sp,
-                                  color: textBlueColor,
-                                ),
-                              ),
-                            ],
-                          );
-                        }),
-                    SizedBox(height: 20.h),
-                    FutureBuilder<Pulang>(
-                      future: pulangC.getPulangYesterday(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-
-                        if (!snapshot.hasData) {
-                          return const Center(
-                            child: CircularProgressIndicator(
-                              semanticsValue: "Coba Update Lagi",
+                    Obx(
+                      () => Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Absen Siang 1",
+                            style: poppins.copyWith(
+                              fontSize: 14.sp,
+                              color: textBlueColor,
+                              fontWeight: FontWeight.bold,
                             ),
-                          );
-                        }
-                        return Column(
+                          ),
+                          Text(
+                            siang1C.mapSiang1FetchYesterday['jam_siang'] ?? "-",
+                            style: poppins.copyWith(
+                              fontSize: 14.sp,
+                              color: textBlueColor,
+                            ),
+                          ),
+                          Text(
+                            siang1C.mapSiang1FetchYesterday['status'] ?? "-",
+                            style: poppins.copyWith(
+                              fontSize: 14.sp,
+                              color: textBlueColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // FutureBuilder<Siang1>(
+                    //   future: siang1C.getSiang1Yesterday(),
+                    //   builder: (context, snapshot) {
+                    //     if (snapshot.connectionState ==
+                    //         ConnectionState.waiting) {
+                    //       return const Center(
+                    //           child: CircularProgressIndicator());
+                    //     }
+                    //     if (!snapshot.hasData) {
+                    //       return const Center(
+                    //         child: CircularProgressIndicator(
+                    //           semanticsValue: "Coba Update Lagi",
+                    //         ),
+                    //       );
+                    //     }
+                    //     return Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: [
+                    //         Text(
+                    //           "Absen Siang 1",
+                    //           style: poppins.copyWith(
+                    //             fontSize: 14.sp,
+                    //             color: textBlueColor,
+                    //             fontWeight: FontWeight.bold,
+                    //           ),
+                    //         ),
+                    //         Text(
+                    //           snapshot.data!.jamSiang ?? "-",
+                    //           style: poppins.copyWith(
+                    //             fontSize: 14.sp,
+                    //             color: textBlueColor,
+                    //           ),
+                    //         ),
+                    //         Text(
+                    //           snapshot.data!.status ?? "-",
+                    //           style: poppins.copyWith(
+                    //             fontSize: 14.sp,
+                    //             color: textBlueColor,
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     );
+                    //   },
+                    // ),
+                    SizedBox(height: 20.h),
+                    Obx(() => Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Absen Pulang",
+                              "Absen Siang 2",
                               style: poppins.copyWith(
                                 fontSize: 14.sp,
                                 color: textBlueColor,
@@ -738,23 +850,144 @@ class HomeView extends GetView<HomeController> {
                               ),
                             ),
                             Text(
-                              snapshot.data!.jamPulang ?? "-",
+                              siang2C.mapSiang2FetchYesterday['jam_siang2'] ??
+                                  "-",
                               style: poppins.copyWith(
                                 fontSize: 14.sp,
                                 color: textBlueColor,
                               ),
                             ),
                             Text(
-                              snapshot.data!.status ?? "-",
+                              siang2C.mapSiang2FetchYesterday['status'] ?? "-",
                               style: poppins.copyWith(
                                 fontSize: 14.sp,
                                 color: textBlueColor,
                               ),
                             ),
                           ],
-                        );
-                      },
+                        )),
+
+                    // FutureBuilder<Siang2>(
+                    //   future: siang2C.getSiang2Yesterday(),
+                    //   builder: (context, snapshot) {
+                    //     if (snapshot.connectionState ==
+                    //         ConnectionState.waiting) {
+                    //       return const Center(
+                    //           child: CircularProgressIndicator());
+                    //     }
+
+                    //     if (!snapshot.hasData) {
+                    //       return const Center(
+                    //         child: CircularProgressIndicator(
+                    //           semanticsValue: "Coba Update Lagi",
+                    //         ),
+                    //       );
+                    //     }
+                    //     return Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: [
+                    //         Text(
+                    //           "Absen Siang 2",
+                    //           style: poppins.copyWith(
+                    //             fontSize: 14.sp,
+                    //             color: textBlueColor,
+                    //             fontWeight: FontWeight.bold,
+                    //           ),
+                    //         ),
+                    //         Text(
+                    //           snapshot.data!.jamSiang2 ?? "-",
+                    //           style: poppins.copyWith(
+                    //             fontSize: 14.sp,
+                    //             color: textBlueColor,
+                    //           ),
+                    //         ),
+                    //         Text(
+                    //           snapshot.data!.status ?? "-",
+                    //           style: poppins.copyWith(
+                    //             fontSize: 14.sp,
+                    //             color: textBlueColor,
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     );
+                    //   },
+                    // ),
+                    SizedBox(height: 20.h),
+                    Obx(
+                      () => Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Absen Pulang",
+                            style: poppins.copyWith(
+                              fontSize: 14.sp,
+                              color: textBlueColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            pulangC.mapPulangFetchYesterday['jam_pulang'] ??
+                                "-",
+                            style: poppins.copyWith(
+                              fontSize: 14.sp,
+                              color: textBlueColor,
+                            ),
+                          ),
+                          Text(
+                            pulangC.mapPulangFetchYesterday['status'] ?? "-",
+                            style: poppins.copyWith(
+                              fontSize: 14.sp,
+                              color: textBlueColor,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
+                    // FutureBuilder<Pulang>(
+                    //   future: pulangC.getPulangYesterday(),
+                    //   builder: (context, snapshot) {
+                    //     if (snapshot.connectionState ==
+                    //         ConnectionState.waiting) {
+                    //       return const Center(
+                    //           child: CircularProgressIndicator());
+                    //     }
+
+                    //     if (!snapshot.hasData) {
+                    //       return const Center(
+                    //         child: CircularProgressIndicator(
+                    //           semanticsValue: "Coba Update Lagi",
+                    //         ),
+                    //       );
+                    //     }
+                    //     return Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: [
+                    //         Text(
+                    //           "Absen Pulang",
+                    //           style: poppins.copyWith(
+                    //             fontSize: 14.sp,
+                    //             color: textBlueColor,
+                    //             fontWeight: FontWeight.bold,
+                    //           ),
+                    //         ),
+                    //         Text(
+                    //           snapshot.data!.jamPulang ?? "-",
+                    //           style: poppins.copyWith(
+                    //             fontSize: 14.sp,
+                    //             color: textBlueColor,
+                    //           ),
+                    //         ),
+                    //         Text(
+                    //           snapshot.data!.status ?? "-",
+                    //           style: poppins.copyWith(
+                    //             fontSize: 14.sp,
+                    //             color: textBlueColor,
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     );
+                    //   },
+                    // ),
                   ],
                 ),
               ),
@@ -771,10 +1004,11 @@ class HomeView extends GetView<HomeController> {
               title: 'Home',
             ),
             TabItem(
-                icon: pageC.isLoading.isFalse
-                    ? Icons.fingerprint
-                    : Icons.restore_sharp,
-                title: 'ABSEN'),
+              icon: pageC.isLoading.isFalse
+                  ? Icons.fingerprint
+                  : Icons.restore_sharp,
+              title: 'ABSEN',
+            ),
             const TabItem(icon: Icons.people, title: 'Profile'),
           ],
           style: TabStyle.fixedCircle,

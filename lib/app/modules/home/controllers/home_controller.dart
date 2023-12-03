@@ -108,7 +108,7 @@ class HomeController extends GetxController {
       mapUser = await getUser();
       userModel.value = await getUserModel();
 
-      debugPrint(userModel.value.toJson().toString());
+      // debugPrint(userModel.value.toJson().toString());
 
       defaultImage.value = userModel.value.imageUrl!.isEmpty ||
               userModel.value.imageUrl == ""

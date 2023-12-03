@@ -41,6 +41,8 @@ class PageIndexController extends GetxController {
         break;
 
       case 1:
+        isLoading.value = true;
+
         pageIndex.value = 1;
 
         //Cek Absensi hari ini
@@ -54,6 +56,8 @@ class PageIndexController extends GetxController {
         bool isWeekend = await homeC.isWeekend();
 
         if (isWeekend) {
+          isLoading.value = false;
+
           Get.dialog(
             AlertDialog(
               title: const Text("Peringatan"),
@@ -89,6 +93,7 @@ class PageIndexController extends GetxController {
               ],
             ),
           );
+          isLoading.value = false;
         } else if (isTimeInRangeNotSiang1()) {
           Get.dialog(
             AlertDialog(
@@ -105,6 +110,7 @@ class PageIndexController extends GetxController {
               ],
             ),
           );
+          isLoading.value = false;
         } else if (isTimeInRangeNotSiang2()) {
           Get.dialog(
             AlertDialog(
@@ -121,6 +127,7 @@ class PageIndexController extends GetxController {
               ],
             ),
           );
+          isLoading.value = false;
         } else if (isTimeInRangeNotPulang()) {
           Get.dialog(
             AlertDialog(
@@ -137,6 +144,7 @@ class PageIndexController extends GetxController {
               ],
             ),
           );
+          isLoading.value = false;
         } else {
           isLoading.value = true;
 
@@ -214,6 +222,11 @@ class PageIndexController extends GetxController {
 
         break;
       case 2:
+        masukC.masukCancelToken.cancel();
+        siang1C.siang1CancelToken.cancel();
+        siang2C.siang2CancelToken.cancel();
+        pulangC.pulangCancelToken.cancel();
+
         pageIndex.value = 2;
         Get.offAllNamed(Routes.PROFILE);
 
