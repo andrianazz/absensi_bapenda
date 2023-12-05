@@ -163,7 +163,10 @@ class LoginView extends GetView<LoginController> {
               Obx(
                 () => ElevatedButton(
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(blueButtonColor),
+                    backgroundColor: MaterialStateProperty.all(
+                        controller.isLoading.value == false
+                            ? blueButtonColor
+                            : Colors.grey[200]),
                     shape: MaterialStateProperty.all(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.r),
@@ -173,13 +176,13 @@ class LoginView extends GetView<LoginController> {
                       EdgeInsets.symmetric(vertical: 12.h),
                     ),
                   ),
-                  onPressed: controller.isLoading.isFalse
+                  onPressed: controller.isLoading.value == false
                       ? () async {
                           // Do something when the form is submitted
                           await controller.loginAPI();
                         }
                       : null,
-                  child: controller.isLoading.isFalse
+                  child: controller.isLoading.value == false
                       ? Text(
                           'Login',
                           style: poppins.copyWith(

@@ -151,15 +151,70 @@ class MasukController {
   }
 
   Future<void> postMasuk(Position position, int radius, String status) async {
-    Absensi absensi = await absensiC.getAbsensiToday();
+    try {
+      Absensi absensi = await absensiC.getAbsensiToday();
 
-    await dio.post("$baseUrlAPI/masuk", data: {
-      "absensi_id": absensi.id,
-      "jam_masuk": DateTime.now().toString().split(' ')[1].split('.')[0],
-      "radius": radius,
-      "long": position.longitude,
-      "lang": position.latitude,
-      "status": status,
-    }).then((value) => Get.snackbar("Berhasil", "Berhasil Absen"));
+      var response = await dio.post("$baseUrlAPI/masuk", data: {
+        "absensi_id": absensi.id,
+        "jam_masuk": DateTime.now().toString().split(' ')[1].split('.')[0],
+        "radius": radius,
+        "long": position.longitude,
+        "lang": position.latitude,
+        "status": status,
+      });
+
+      if (response.statusCode == 200) {
+        Get.snackbar(
+          "Berhasil",
+          "Berhasil Absen Masuk",
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+        debugPrint("Berhasil Post Masuk");
+      } else {
+        Get.snackbar(
+          "Gagal",
+          "Gagal Absen Masuk",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+        debugPrint("Gagal Post Masuk");
+      }
+    } on DioError catch (e) {
+      debugPrint(e.toString());
+      if (e.response!.statusCode == 404) {
+        debugPrint("Data Masuk Belum Ada");
+        Get.snackbar(
+          "Gagal",
+          "Gagal Absen Masuk",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      } else if (e.response!.statusCode == 500) {
+        debugPrint("Server Error");
+        Get.snackbar(
+          "Gagal",
+          "Gagal Absen Masuk",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      } else if (e.response!.statusCode == 429) {
+        debugPrint("Terlalu Banyak Request postMasuk");
+        Get.snackbar(
+          "Gagal",
+          "Gagal Absen Masuk",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      Get.snackbar(
+        "Gagal",
+        "Gagal Absen Masuk",
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
   }
 }

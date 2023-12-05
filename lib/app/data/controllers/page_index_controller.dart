@@ -29,6 +29,7 @@ class PageIndexController extends GetxController {
   HomeController homeC = Get.put(HomeController());
 
   RxBool isLoading = false.obs;
+  RxString statusLoading = "".obs;
 
   RxInt pageIndex = 0.obs;
 
@@ -41,13 +42,19 @@ class PageIndexController extends GetxController {
         break;
 
       case 1:
-        isLoading.value = true;
+        statusLoading.value = "Silahkan Tunggu..........";
+        debugPrint("status loading: ${statusLoading.value}");
 
         pageIndex.value = 1;
+        isLoading.value = true;
+        if (isLoading.value == true) {
+          voidDialogLoading();
+        }
 
         //Cek Absensi hari ini
         Absensi absensi = await absensiC.getAbsensiToday();
         if (absensi.id == null) {
+          statusLoading.value = "Membuat Absensi Hari Ini";
           // print("hari ini belum ada");
           await absensiC.createAbsensiToday();
         }
@@ -57,6 +64,7 @@ class PageIndexController extends GetxController {
 
         if (isWeekend) {
           isLoading.value = false;
+          Get.back();
 
           Get.dialog(
             AlertDialog(
@@ -78,6 +86,9 @@ class PageIndexController extends GetxController {
         }
 
         if (isTimeInRangeNotPagi()) {
+          isLoading.value = false;
+          Get.back();
+
           Get.dialog(
             AlertDialog(
               title: const Text("Peringatan"),
@@ -93,8 +104,10 @@ class PageIndexController extends GetxController {
               ],
             ),
           );
-          isLoading.value = false;
         } else if (isTimeInRangeNotSiang1()) {
+          isLoading.value = false;
+          Get.back();
+
           Get.dialog(
             AlertDialog(
               title: const Text("Peringatan"),
@@ -110,8 +123,10 @@ class PageIndexController extends GetxController {
               ],
             ),
           );
-          isLoading.value = false;
         } else if (isTimeInRangeNotSiang2()) {
+          isLoading.value = false;
+          Get.back();
+
           Get.dialog(
             AlertDialog(
               title: const Text("Peringatan"),
@@ -127,8 +142,10 @@ class PageIndexController extends GetxController {
               ],
             ),
           );
-          isLoading.value = false;
         } else if (isTimeInRangeNotPulang()) {
+          isLoading.value = false;
+          Get.back();
+
           Get.dialog(
             AlertDialog(
               title: const Text("Peringatan"),
@@ -144,13 +161,19 @@ class PageIndexController extends GetxController {
               ],
             ),
           );
-          isLoading.value = false;
         } else {
           isLoading.value = true;
 
+          // Check Fake GPS
+
           //check location is enabled
           bool isLocationEnabled = await Geolocator.isLocationServiceEnabled();
+          statusLoading.value = "Mengecek Perizinan Lokasi";
+
           if (!isLocationEnabled) {
+            isLoading.value = false;
+            Get.back();
+
             Get.dialog(
               AlertDialog(
                 title: const Text("Location Permits"),
@@ -195,22 +218,30 @@ class PageIndexController extends GetxController {
               ),
             );
 
-            isLoading.value = false;
             break;
           }
 
           Map<String, dynamic> dataResponse = await _determinePosition();
+          if (dataResponse["position"] == null) {
+            isLoading.value = false;
+            Get.back();
 
-          isLoading.value = false;
+            Get.snackbar("Terjadi Kesalahan", "Gagal mendapatkan lokasi");
+            break;
+          }
 
           Position position = dataResponse['position'];
 
           if (dataResponse['error'] == true) {
+            isLoading.value = false;
+            Get.back();
+
             Get.snackbar("Terjadi Kesalahan", dataResponse['message']);
           } else {
             List<Placemark> placemarks = await GeocodingPlatform.instance
                 .placemarkFromCoordinates(position.latitude, position.longitude,
                     localeIdentifier: "id_ID");
+            statusLoading.value = "Mendapatkan Lokasi";
 
             String address =
                 "${placemarks[placemarks.length - 1].street}, ${placemarks[placemarks.length - 1].subLocality}, ${placemarks[placemarks.length - 1].locality}";
@@ -237,7 +268,67 @@ class PageIndexController extends GetxController {
     }
   }
 
+  void voidDialogLoading() {
+    Get.dialog(
+      barrierDismissible: false,
+      AlertDialog(
+        content: SizedBox(
+          width: double.maxFinite,
+          height: 100,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const CircularProgressIndicator(),
+                    SizedBox(width: 20.w),
+                    Obx(() => Expanded(child: Text(statusLoading.value))),
+                  ],
+                ),
+              ),
+              SizedBox(width: 20.w),
+              ElevatedButton(
+                onPressed: () {
+                  isLoading.value = false;
+                  Get.back();
+                  return;
+                },
+                child: const Text("Cancel"),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Future<void> updatePosition(Position position, String address) async {
+    statusLoading.value = "Mengecek Fake GPS";
+
+    if (position.isMocked == true) {
+      isLoading.value = false;
+      Get.back();
+
+      Get.dialog(
+        AlertDialog(
+          title: const Text("Peringatan"),
+          content: const Text(
+              "Anda menggunakan Fake GPS, Silahkan matikan Fake GPS anda"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
     // print("updatePosition: $position");
     // print("address: $address");
   }
@@ -274,6 +365,7 @@ class PageIndexController extends GetxController {
         status = "Bapenda Pekanbaru";
       } else {
         isLoading.value = false;
+        Get.back();
 
         Get.dialog(
           AlertDialog(
@@ -295,6 +387,9 @@ class PageIndexController extends GetxController {
 
       Masuk masuk = await masukC.getMasukToday();
       if (masuk.id == null) {
+        isLoading.value = false;
+        Get.back();
+
         Get.dialog(
           AlertDialog(
             title: const Text("ABSEN MASUK"),
@@ -308,11 +403,15 @@ class PageIndexController extends GetxController {
               ),
               TextButton(
                 onPressed: () async {
+                  voidDialogLoading();
+
                   await masukC.postMasuk(
                     position,
                     distanceBapenda.toInt(),
                     status,
                   );
+
+                  Get.back();
 
                   Get.offAllNamed(Routes.HOME);
                 },
@@ -322,10 +421,11 @@ class PageIndexController extends GetxController {
           ),
         );
 
-        isLoading.value = false;
-
         return;
       } else {
+        isLoading.value = false;
+        Get.back();
+
         Get.dialog(AlertDialog(
           title: const Text("Peringatan"),
           content: const Text("Anda sudah melakukan absen masuk"),
@@ -338,8 +438,6 @@ class PageIndexController extends GetxController {
             ),
           ],
         ));
-
-        isLoading.value = false;
       }
       return;
     }
@@ -350,6 +448,7 @@ class PageIndexController extends GetxController {
         status = "UPT 1";
       } else {
         isLoading.value = false;
+        Get.back();
 
         Get.dialog(
           AlertDialog(
@@ -373,6 +472,7 @@ class PageIndexController extends GetxController {
         status = "UPT 2";
       } else {
         isLoading.value = false;
+        Get.back();
 
         Get.dialog(
           AlertDialog(
@@ -396,6 +496,7 @@ class PageIndexController extends GetxController {
         status = "UPT 3";
       } else {
         isLoading.value = false;
+        Get.back();
 
         Get.dialog(
           AlertDialog(
@@ -419,6 +520,7 @@ class PageIndexController extends GetxController {
         status = "UPT 4";
       } else {
         isLoading.value = false;
+        Get.back();
 
         Get.dialog(
           AlertDialog(
@@ -442,6 +544,7 @@ class PageIndexController extends GetxController {
         status = "UPT 5";
       } else {
         isLoading.value = false;
+        Get.back();
 
         Get.dialog(
           AlertDialog(
@@ -465,6 +568,7 @@ class PageIndexController extends GetxController {
         status = "Bapenda Pekanbaru";
       } else {
         isLoading.value = false;
+        Get.back();
 
         // print(
         //     "latitude : ${position.latitude} longitude : ${position.longitude}");
@@ -488,14 +592,30 @@ class PageIndexController extends GetxController {
       }
     }
 
-    Masuk masuk = await masukC.getMasukToday();
-    Siang1 siang1 = await siang1C.getSiang1Today();
-    Siang2 siang2 = await siang2C.getSiang2Today();
-    Pulang pulang = await pulangC.getPulangToday();
-
     //Memasukkan data ke dalam database
+    if (homeC.userModel.value.unitKerjaId! >= 6) {
+      insertToDatabase(position, distanceBapenda.toInt(), status);
+    } else if (homeC.userModel.value.unitKerjaId == 1) {
+      insertToDatabase(position, distanceUPT1.toInt(), status);
+    } else if (homeC.userModel.value.unitKerjaId == 2) {
+      insertToDatabase(position, distanceUPT2.toInt(), status);
+    } else if (homeC.userModel.value.unitKerjaId == 3) {
+      insertToDatabase(position, distanceUPT3.toInt(), status);
+    } else if (homeC.userModel.value.unitKerjaId == 4) {
+      insertToDatabase(position, distanceUPT4.toInt(), status);
+    } else if (homeC.userModel.value.unitKerjaId == 5) {
+      insertToDatabase(position, distanceUPT5.toInt(), status);
+    }
+  }
+
+  void insertToDatabase(
+      Position position, int distanceKantor, String status) async {
     if (isTimeInRangePagi()) {
+      Masuk masuk = await masukC.getMasukToday();
       if (masuk.id == null) {
+        isLoading.value = false;
+        Get.back();
+
         Get.dialog(
           AlertDialog(
             title: const Text("ABSEN MASUK"),
@@ -509,11 +629,15 @@ class PageIndexController extends GetxController {
               ),
               TextButton(
                 onPressed: () async {
+                  voidDialogLoading();
+
                   await masukC.postMasuk(
                     position,
-                    distanceBapenda.toInt(),
+                    distanceKantor,
                     status,
                   );
+
+                  isLoading.value = false;
 
                   Get.offAllNamed(Routes.HOME);
                 },
@@ -522,9 +646,10 @@ class PageIndexController extends GetxController {
             ],
           ),
         );
-
-        isLoading.value = false;
       } else {
+        isLoading.value = false;
+        Get.back();
+
         Get.dialog(AlertDialog(
           title: const Text("Peringatan"),
           content: const Text("Anda sudah melakukan absen masuk"),
@@ -537,11 +662,12 @@ class PageIndexController extends GetxController {
             ),
           ],
         ));
-
-        isLoading.value = false;
       }
     } else if (isTimeInRangeSiang1()) {
+      Siang1 siang1 = await siang1C.getSiang1Today();
       if (siang1.id == null) {
+        isLoading.value = false;
+        Get.back();
         // await masukC.postMasuk(position, status);
         Get.dialog(
           AlertDialog(
@@ -556,11 +682,16 @@ class PageIndexController extends GetxController {
               ),
               TextButton(
                 onPressed: () async {
+                  voidDialogLoading();
+
                   await siang1C.postSiang1(
                     position,
-                    distanceBapenda.toInt(),
+                    distanceKantor,
                     status,
                   );
+
+                  isLoading.value = false;
+                  Get.back();
 
                   Get.offAllNamed(Routes.HOME);
                 },
@@ -569,8 +700,10 @@ class PageIndexController extends GetxController {
             ],
           ),
         );
-        isLoading.value = false;
       } else {
+        isLoading.value = false;
+        Get.back();
+
         Get.dialog(
           AlertDialog(
             title: const Text("Peringatan"),
@@ -585,11 +718,13 @@ class PageIndexController extends GetxController {
             ],
           ),
         );
-        isLoading.value = false;
       }
     } else if (isTimeInRangeSiang2()) {
+      Siang2 siang2 = await siang2C.getSiang2Today();
+
       if (siang2.id == null) {
         isLoading.value = false;
+        Get.back();
 
         // await masukC.postMasuk(position, status);
         Get.dialog(
@@ -605,11 +740,16 @@ class PageIndexController extends GetxController {
               ),
               TextButton(
                 onPressed: () async {
+                  voidDialogLoading();
+
                   await siang2C.postSiang2(
                     position,
-                    distanceBapenda.toInt(),
+                    distanceKantor,
                     status,
                   );
+
+                  isLoading.value = false;
+                  Get.back();
 
                   Get.offAllNamed(Routes.HOME);
                 },
@@ -620,6 +760,7 @@ class PageIndexController extends GetxController {
         );
       } else {
         isLoading.value = false;
+        Get.back();
 
         Get.dialog(
           AlertDialog(
@@ -637,8 +778,11 @@ class PageIndexController extends GetxController {
         );
       }
     } else if (isTimeInRangePulang()) {
+      Pulang pulang = await pulangC.getPulangToday();
+
       if (pulang.id == null) {
         isLoading.value = false;
+        Get.back();
 
         Get.dialog(
           AlertDialog(
@@ -653,12 +797,15 @@ class PageIndexController extends GetxController {
               ),
               TextButton(
                 onPressed: () async {
+                  voidDialogLoading();
+
                   await pulangC.postPulang(
                     position,
-                    distanceBapenda.toInt(),
+                    distanceKantor,
                     status,
                   );
 
+                  isLoading.value = false;
                   Get.back();
 
                   Get.offAllNamed(Routes.HOME);
@@ -670,6 +817,7 @@ class PageIndexController extends GetxController {
         );
       } else {
         isLoading.value = false;
+        Get.back();
 
         Get.dialog(
           AlertDialog(
@@ -735,12 +883,22 @@ class PageIndexController extends GetxController {
 
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
-    Position position = await Geolocator.getCurrentPosition();
-    return {
-      'position': position,
-      'message': 'Berhasil mendapatkan position',
-      'error': false,
-    };
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best,
+        timeLimit: const Duration(seconds: 10),
+      );
+      return {
+        'position': position,
+        'message': 'Berhasil mendapatkan position',
+        'error': false,
+      };
+    } catch (e) {
+      return {
+        'message': 'Gagal mendapatkan position',
+        'error': true,
+      };
+    }
   }
 
   bool isTimeInRangePagi() {

@@ -99,8 +99,6 @@ class HomeController extends GetxController {
 
   @override
   void onInit() async {
-    super.onInit();
-
     if (await checkSharedPreference() == "") {
       Get.offAllNamed(Routes.LOGIN);
       await deletePreference();
@@ -120,5 +118,7 @@ class HomeController extends GetxController {
           ? "https://ui-avatars.com/api/?name=${userModel.value.nama!.split(' ').join('+')}&background=0D8ABC&bold=true&color=fff&size=512"
           : '$baseUrl/storage/images/${userModel.value.imageUrl}';
     }
+
+    super.onInit();
   }
 }

@@ -143,15 +143,70 @@ class PulangController {
   }
 
   Future<void> postPulang(Position position, int radius, String status) async {
-    Absensi absensi = await absensiC.getAbsensiToday();
+    try {
+      Absensi absensi = await absensiC.getAbsensiToday();
 
-    await dio.post("$baseUrlAPI/pulang", data: {
-      "absensi_id": absensi.id,
-      "jam_pulang": DateTime.now().toString().split(' ')[1].split('.')[0],
-      "radius": radius,
-      "long": position.longitude,
-      "lang": position.latitude,
-      "status": status,
-    }).then((value) => Get.snackbar("Berhasil", "Berhasil Pulang"));
+      var response = await dio.post("$baseUrlAPI/pulang", data: {
+        "absensi_id": absensi.id,
+        "jam_pulang": DateTime.now().toString().split(' ')[1].split('.')[0],
+        "radius": radius,
+        "long": position.longitude,
+        "lang": position.latitude,
+        "status": status,
+      });
+
+      if (response.statusCode == 200) {
+        Get.snackbar(
+          "Berhasil",
+          "Berhasil Absen Pulang",
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      } else {
+        Get.snackbar(
+          "Gagal",
+          "Gagal Absen Pulang",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
+    } on DioError catch (e) {
+      if (e.response!.statusCode == 404) {
+        Get.snackbar(
+          "Gagal",
+          "Gagal Absen Pulang",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      } else if (e.response!.statusCode == 500) {
+        Get.snackbar(
+          "Gagal",
+          "Server Error",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      } else if (e.response!.statusCode == 429) {
+        Get.snackbar(
+          "Gagal",
+          "Terlalu Banyak Request",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      Get.snackbar(
+        "Gagal",
+        "Absen Pulang Gagal",
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
   }
 }

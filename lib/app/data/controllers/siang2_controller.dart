@@ -147,15 +147,53 @@ class Siang2Controller {
   }
 
   Future<void> postSiang2(Position position, int radius, String status) async {
-    Absensi absensi = await absensiC.getAbsensiToday();
+    try {
+      Absensi absensi = await absensiC.getAbsensiToday();
 
-    await dio.post("$baseUrlAPI/siang2", data: {
-      "absensi_id": absensi.id,
-      "jam_siang2": DateTime.now().toString().split(' ')[1].split('.')[0],
-      "radius": radius,
-      "long": position.longitude,
-      "lang": position.latitude,
-      "status": status,
-    }).then((value) => Get.snackbar("Berhasil", "Berhasil Absen Siang2"));
+      var response = await dio.post("$baseUrlAPI/siang2", data: {
+        "absensi_id": absensi.id,
+        "jam_siang2": DateTime.now().toString().split(' ')[1].split('.')[0],
+        "radius": radius,
+        "long": position.longitude,
+        "lang": position.latitude,
+        "status": status,
+      });
+
+      if (response.statusCode == 200) {
+        Get.snackbar(
+          "Berhasil",
+          "Berhasil Absen Siang 2",
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
+    } on DioError catch (e) {
+      if (e.response!.statusCode == 404) {
+        Get.snackbar(
+          "Gagal",
+          "Gagal Absen Siang 2",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      } else if (e.response!.statusCode == 500) {
+        Get.snackbar(
+          "Gagal",
+          "Server Error",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      } else if (e.response!.statusCode == 429) {
+        Get.snackbar(
+          "Gagal",
+          "Terlalu Banyak Request",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
+    }
   }
 }
