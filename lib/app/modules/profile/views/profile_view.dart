@@ -102,7 +102,9 @@ class ProfileView extends GetView<ProfileController> {
               Center(
                 child: GestureDetector(
                   onTap: () async {
-                    launchUrl(Uri.parse("github.com/andrianazz"));
+                    // launchUrl(Uri.parse("http://github.com/andrianazz"));
+                    // Logout
+                    await controller.logout();
                   },
                   child: Text(
                     "Versi 1.0.0",

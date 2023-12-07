@@ -82,4 +82,10 @@ class ProfileController extends GetxController {
       // print('Failed to upload image: $error');
     }
   }
+
+  Future<void> logout() async {
+    pref = await SharedPreferences.getInstance();
+    pref.clear();
+    Get.offAllNamed(Routes.LOGIN);
+  }
 }

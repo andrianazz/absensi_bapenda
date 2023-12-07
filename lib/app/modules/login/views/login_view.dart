@@ -166,7 +166,7 @@ class LoginView extends GetView<LoginController> {
                     backgroundColor: MaterialStateProperty.all(
                         controller.isLoading.value == false
                             ? blueButtonColor
-                            : Colors.grey[200]),
+                            : Colors.grey),
                     shape: MaterialStateProperty.all(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.r),
@@ -179,7 +179,12 @@ class LoginView extends GetView<LoginController> {
                   onPressed: controller.isLoading.value == false
                       ? () async {
                           // Do something when the form is submitted
-                          await controller.loginAPI();
+                          if (controller.formKey.currentState!.validate()) {
+                            await controller.loginAPI(
+                              controller.nikC.text,
+                              controller.passC.text,
+                            );
+                          }
                         }
                       : null,
                   child: controller.isLoading.value == false
