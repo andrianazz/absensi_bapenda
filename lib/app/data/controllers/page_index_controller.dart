@@ -270,7 +270,12 @@ class PageIndexController extends GetxController {
                       Get.back();
                       Get.back();
 
-                      Get.snackbar("Berhasil", result["message"]);
+                      Get.snackbar(
+                        "Berhasil",
+                        result["message"],
+                        colorText: Colors.white,
+                        backgroundColor: Colors.green,
+                      );
 
                       Get.offAllNamed(Routes.HOME);
                       return;
