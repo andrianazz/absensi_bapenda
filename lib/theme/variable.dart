@@ -10,5 +10,12 @@
 // const String baseUrlAPI = "http://202.46.66.171/api";
 // const String baseUrl = "http://202.46.66.171";
 
+import 'dart:convert';
+
 const String baseUrlAPI = "https://absensi.bapenda.pekanbaru.go.id/api";
 const String baseUrl = "https://absensi.bapenda.pekanbaru.go.id";
+
+String username = 'Absenbapenda';
+String password = 'b2@Y@3SaN!';
+// String basicAuth = 'Basic ${base64.encode(utf8.encode('$username:$password'))}';
+String basicAuthEncode = "QWJzZW5iYXBlbmRhOmIyQFlAM1NhTiE=";

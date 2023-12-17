@@ -1,12 +1,4 @@
-import 'package:absensi_bapenda/app/data/controllers/masuk_controller.dart';
 import 'package:absensi_bapenda/app/data/controllers/page_index_controller.dart';
-import 'package:absensi_bapenda/app/data/controllers/pulang_controller.dart';
-import 'package:absensi_bapenda/app/data/controllers/siang1_controller.dart';
-import 'package:absensi_bapenda/app/data/controllers/siang2_controller.dart';
-import 'package:absensi_bapenda/app/data/models/masuk_model.dart';
-import 'package:absensi_bapenda/app/data/models/pulang_model.dart';
-import 'package:absensi_bapenda/app/data/models/siang1_model.dart';
-import 'package:absensi_bapenda/app/data/models/siang2_model.dart';
 import 'package:absensi_bapenda/theme/color.dart';
 import 'package:absensi_bapenda/theme/style.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
@@ -21,12 +13,7 @@ class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    HomeController controller = Get.put(HomeController());
     PageIndexController pageC = Get.put(PageIndexController());
-    MasukController masukC = Get.put(MasukController());
-    Siang1Controller siang1C = Get.put(Siang1Controller());
-    Siang2Controller siang2C = Get.put(Siang2Controller());
-    PulangController pulangC = Get.put(PulangController());
 
     return Scaffold(
       key: controller.scaffoldKey,
@@ -109,186 +96,106 @@ class HomeView extends GetView<HomeController> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        FutureBuilder<Masuk>(
-                            future: masukC.getMasukwithUserId(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-
-                              if (!snapshot.hasData) {
-                                return Column(
-                                  children: [
-                                    Text(
-                                      "Terjadi Kesalahan",
-                                      style: poppins.copyWith(fontSize: 8.sp),
-                                    ),
-                                  ],
-                                );
-                              }
-
-                              return Column(
-                                children: [
-                                  Text(
-                                    "Absen Pagi",
-                                    style: poppins.copyWith(
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.bold,
-                                      color: textWhiteColor,
-                                    ),
-                                  ),
-                                  Text(
-                                    snapshot.data!.jamMasuk ?? "-",
-                                    style: poppins.copyWith(
-                                      fontSize: 14.sp,
-                                      color: textWhiteColor,
-                                    ),
-                                  )
-                                ],
-                              );
-                            }),
+                        Column(
+                          children: [
+                            Text(
+                              "Absen Pagi",
+                              style: poppins.copyWith(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.bold,
+                                color: textWhiteColor,
+                              ),
+                            ),
+                            Text(
+                              controller.dataAbsenModel.value.absentoday
+                                      ?.jamMasuk ??
+                                  "-",
+                              style: poppins.copyWith(
+                                fontSize: 14.sp,
+                                color: textWhiteColor,
+                              ),
+                            )
+                          ],
+                        ),
                         Container(
                             width: 2.w, height: 35.h, color: lineBlueColor),
-                        FutureBuilder<Siang1>(
-                            future: siang1C.getSiang1withUserId(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-
-                              if (!snapshot.hasData) {
-                                return Column(
-                                  children: [
-                                    Text(
-                                      "Terjadi Kesalahan",
-                                      style: poppins.copyWith(fontSize: 8.sp),
-                                    ),
-                                  ],
-                                );
-                              }
-
-                              return Column(
-                                children: [
-                                  Text(
-                                    "Absen Siang 1",
-                                    style: poppins.copyWith(
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.bold,
-                                      color: textWhiteColor,
-                                    ),
-                                  ),
-                                  Text(
-                                    snapshot.data!.jamSiang ?? "-",
-                                    style: poppins.copyWith(
-                                      fontSize: 14.sp,
-                                      color: textWhiteColor,
-                                    ),
-                                  )
-                                ],
-                              );
-                            }),
+                        Column(
+                          children: [
+                            Text(
+                              "Absen Siang 1",
+                              style: poppins.copyWith(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.bold,
+                                color: textWhiteColor,
+                              ),
+                            ),
+                            Text(
+                              controller.dataAbsenModel.value.absentoday
+                                      ?.jamSiang ??
+                                  "-",
+                              style: poppins.copyWith(
+                                fontSize: 14.sp,
+                                color: textWhiteColor,
+                              ),
+                            )
+                          ],
+                        ),
                       ],
                     ),
                     SizedBox(height: 10.h),
                     Container(
                       width: double.infinity,
                       height: 2.h,
-                      color: lineBlueColor,
+                      color: const Color(0xffE4E4E4),
                     ),
                     SizedBox(height: 10.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        FutureBuilder<Siang2>(
-                            future: siang2C.getSiang2withUserId(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-
-                              if (!snapshot.hasData) {
-                                return Column(
-                                  children: [
-                                    Text(
-                                      "Terjadi Kesalahan",
-                                      style: poppins.copyWith(fontSize: 8.sp),
-                                    ),
-                                  ],
-                                );
-                              }
-
-                              return Column(
-                                children: [
-                                  Text(
-                                    "Absen Siang 2",
-                                    style: poppins.copyWith(
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.bold,
-                                      color: textWhiteColor,
-                                    ),
-                                  ),
-                                  Text(
-                                    snapshot.data!.jamSiang2 ?? "-",
-                                    style: poppins.copyWith(
-                                      fontSize: 14.sp,
-                                      color: textWhiteColor,
-                                    ),
-                                  )
-                                ],
-                              );
-                            }),
+                        Column(
+                          children: [
+                            Text(
+                              "Absen Siang 2",
+                              style: poppins.copyWith(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.bold,
+                                color: textWhiteColor,
+                              ),
+                            ),
+                            Text(
+                              controller.dataAbsenModel.value.absentoday
+                                      ?.jamSiang2 ??
+                                  "-",
+                              style: poppins.copyWith(
+                                fontSize: 14.sp,
+                                color: textWhiteColor,
+                              ),
+                            )
+                          ],
+                        ),
                         Container(
                             width: 2.w, height: 35.h, color: lineBlueColor),
-                        FutureBuilder<Pulang>(
-                            future: pulangC.getPulangwithUserId(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-
-                              if (!snapshot.hasData) {
-                                return Column(
-                                  children: [
-                                    Text(
-                                      "Terjadi Kesalahan",
-                                      style: poppins.copyWith(fontSize: 8.sp),
-                                    ),
-                                  ],
-                                );
-                              }
-
-                              return Column(
-                                children: [
-                                  Text(
-                                    "Absen Pulang",
-                                    style: poppins.copyWith(
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.bold,
-                                      color: textWhiteColor,
-                                    ),
-                                  ),
-                                  Text(
-                                    snapshot.data!.jamPulang ?? "-",
-                                    style: poppins.copyWith(
-                                      fontSize: 14.sp,
-                                      color: textWhiteColor,
-                                    ),
-                                  )
-                                ],
-                              );
-                            }),
+                        Column(
+                          children: [
+                            Text(
+                              "Absen Pulang",
+                              style: poppins.copyWith(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.bold,
+                                color: textWhiteColor,
+                              ),
+                            ),
+                            Text(
+                              controller.dataAbsenModel.value.absentoday
+                                      ?.jamPulang ??
+                                  "-",
+                              style: poppins.copyWith(
+                                fontSize: 14.sp,
+                                color: textWhiteColor,
+                              ),
+                            )
+                          ],
+                        ),
                       ],
                     ),
                   ],
@@ -354,70 +261,24 @@ class HomeView extends GetView<HomeController> {
                                 ),
                               ),
                               Text(
-                                masukC.mapFetchToday['jam_masuk'] ?? "-",
+                                controller.dataAbsenModel.value.absenbefore?[0]
+                                        .jamMasuk ??
+                                    "-",
                                 style: poppins.copyWith(
                                   fontSize: 14.sp,
                                   color: textBlueColor,
                                 ),
                               ),
-                              Text(
-                                masukC.mapFetchToday['status'] ?? "-",
-                                style: poppins.copyWith(
-                                  fontSize: 14.sp,
-                                  color: textBlueColor,
-                                ),
-                              ),
+                              // Text(
+                              //   masukC.mapFetchToday['status'] ?? "-",
+                              //   style: poppins.copyWith(
+                              //     fontSize: 14.sp,
+                              //     color: textBlueColor,
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),
-                        // FutureBuilder<Masuk>(
-                        //   future: masukC.getMasukwithUserId(),
-                        //   builder: (context, snapshot) {
-                        //     if (snapshot.connectionState ==
-                        //         ConnectionState.waiting) {
-                        //       return const Center(
-                        //           child: CircularProgressIndicator());
-                        //     }
-                        //     if (!snapshot.hasData) {
-                        //       return Column(
-                        //         children: [
-                        //           const CircularProgressIndicator(),
-                        //           Text(
-                        //             "Coba Update Lagi",
-                        //             style: poppins.copyWith(fontSize: 8.sp),
-                        //           ),
-                        //         ],
-                        //       );
-                        //     }
-                        //     return Column(
-                        //       crossAxisAlignment: CrossAxisAlignment.start,
-                        //       children: [
-                        //         Text(
-                        //           "Absen Pagi",
-                        //           style: poppins.copyWith(
-                        //             fontSize: 14.sp,
-                        //             color: textBlueColor,
-                        //             fontWeight: FontWeight.bold,
-                        //           ),
-                        //         ),
-                        //         Text(
-                        //           snapshot.data!.jamMasuk ?? "-",
-                        //           style: poppins.copyWith(
-                        //             fontSize: 14.sp,
-                        //             color: textBlueColor,
-                        //           ),
-                        //         ),
-                        //         Text(
-                        //           snapshot.data!.status ?? "-",
-                        //           style: poppins.copyWith(
-                        //             fontSize: 14.sp,
-                        //             color: textBlueColor,
-                        //           ),
-                        //         ),
-                        //       ],
-                        //     );
-                        //   },
-                        // ),
                         Text(
                           controller.today,
                           style: poppins.copyWith(
@@ -442,67 +303,24 @@ class HomeView extends GetView<HomeController> {
                             ),
                           ),
                           Text(
-                            siang1C.mapSiang1FetchToday['jam_siang'] ?? "-",
+                            controller.dataAbsenModel.value.absenbefore?[0]
+                                    .jamSiang ??
+                                "-",
                             style: poppins.copyWith(
                               fontSize: 14.sp,
                               color: textBlueColor,
                             ),
                           ),
-                          Text(
-                            siang1C.mapSiang1FetchToday['status'] ?? "-",
-                            style: poppins.copyWith(
-                              fontSize: 14.sp,
-                              color: textBlueColor,
-                            ),
-                          ),
+                          // Text(
+                          //   siang1C.mapSiang1FetchToday['status'] ?? "-",
+                          //   style: poppins.copyWith(
+                          //     fontSize: 14.sp,
+                          //     color: textBlueColor,
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
-                    // FutureBuilder<Siang1>(
-                    //   future: siang1C.getSiang1withUserId(),
-                    //   builder: (context, snapshot) {
-                    //     if (snapshot.connectionState ==
-                    //         ConnectionState.waiting) {
-                    //       return const Center(
-                    //           child: CircularProgressIndicator());
-                    //     }
-
-                    //     if (!snapshot.hasData) {
-                    //       return const Center(
-                    //         child: CircularProgressIndicator(
-                    //           semanticsValue: "Coba Update Lagi",
-                    //         ),
-                    //       );
-                    //     }
-                    //     return Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       children: [
-                    //         Text(
-                    //           "Absen Siang 1",
-                    //           style: poppins.copyWith(
-                    //             fontSize: 14.sp,
-                    //             color: textBlueColor,
-                    //             fontWeight: FontWeight.bold,
-                    //           ),
-                    //         ),
-                    //         Text(
-                    //           snapshot.data!.jamSiang ?? "-",
-                    //           style: poppins.copyWith(
-                    //             fontSize: 14.sp,
-                    //             color: textBlueColor,
-                    //           ),
-                    //         ),
-                    //         Text(
-                    //           snapshot.data!.status ?? "-",
-                    //           style: poppins.copyWith(
-                    //             fontSize: 14.sp,
-                    //             color: textBlueColor,
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     );
-                    //   },
-                    // ),
                     SizedBox(height: 20.h),
                     Obx(() => Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -516,66 +334,23 @@ class HomeView extends GetView<HomeController> {
                               ),
                             ),
                             Text(
-                              siang2C.mapSiang2FetchToday['jam_siang2'] ?? "-",
+                              controller.dataAbsenModel.value.absenbefore?[0]
+                                      .jamSiang2 ??
+                                  "-",
                               style: poppins.copyWith(
                                 fontSize: 14.sp,
                                 color: textBlueColor,
                               ),
                             ),
-                            Text(
-                              siang2C.mapSiang2FetchToday['status'] ?? "-",
-                              style: poppins.copyWith(
-                                fontSize: 14.sp,
-                                color: textBlueColor,
-                              ),
-                            ),
+                            // Text(
+                            //   siang2C.mapSiang2FetchToday['status'] ?? "-",
+                            //   style: poppins.copyWith(
+                            //     fontSize: 14.sp,
+                            //     color: textBlueColor,
+                            //   ),
+                            // ),
                           ],
                         )),
-                    // FutureBuilder<Siang2>(
-                    //   future: siang2C.getSiang2withUserId(),
-                    //   builder: (context, snapshot) {
-                    //     if (snapshot.connectionState ==
-                    //         ConnectionState.waiting) {
-                    //       return const Center(
-                    //           child: CircularProgressIndicator());
-                    //     }
-
-                    //     if (!snapshot.hasData) {
-                    //       return const Center(
-                    //         child: CircularProgressIndicator(
-                    //           semanticsValue: "Coba Update Lagi",
-                    //         ),
-                    //       );
-                    //     }
-                    //     return Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       children: [
-                    //         Text(
-                    //           "Absen Siang 2",
-                    //           style: poppins.copyWith(
-                    //             fontSize: 14.sp,
-                    //             color: textBlueColor,
-                    //             fontWeight: FontWeight.bold,
-                    //           ),
-                    //         ),
-                    //         Text(
-                    //           snapshot.data!.jamSiang2 ?? "-",
-                    //           style: poppins.copyWith(
-                    //             fontSize: 14.sp,
-                    //             color: textBlueColor,
-                    //           ),
-                    //         ),
-                    //         Text(
-                    //           snapshot.data!.status ?? "-",
-                    //           style: poppins.copyWith(
-                    //             fontSize: 14.sp,
-                    //             color: textBlueColor,
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     );
-                    //   },
-                    // ),
                     SizedBox(height: 20.h),
                     Obx(
                       () => Column(
@@ -590,14 +365,9 @@ class HomeView extends GetView<HomeController> {
                             ),
                           ),
                           Text(
-                            pulangC.mapPulangFetchToday['jam_pulang'] ?? "-",
-                            style: poppins.copyWith(
-                              fontSize: 14.sp,
-                              color: textBlueColor,
-                            ),
-                          ),
-                          Text(
-                            pulangC.mapPulangFetchToday['status'] ?? "-",
+                            controller.dataAbsenModel.value.absenbefore?[0]
+                                    .jamPulang ??
+                                "-",
                             style: poppins.copyWith(
                               fontSize: 14.sp,
                               color: textBlueColor,
@@ -606,51 +376,6 @@ class HomeView extends GetView<HomeController> {
                         ],
                       ),
                     ),
-                    // FutureBuilder<Pulang>(
-                    //   future: pulangC.getPulangwithUserId(),
-                    //   builder: (context, snapshot) {
-                    //     if (snapshot.connectionState ==
-                    //         ConnectionState.waiting) {
-                    //       return const Center(
-                    //           child: CircularProgressIndicator());
-                    //     }
-
-                    //     if (!snapshot.hasData) {
-                    //       return const Center(
-                    //         child: CircularProgressIndicator(
-                    //           semanticsValue: "Coba Update Lagi",
-                    //         ),
-                    //       );
-                    //     }
-                    //     return Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       children: [
-                    //         Text(
-                    //           "Absen Pulang",
-                    //           style: poppins.copyWith(
-                    //             fontSize: 14.sp,
-                    //             color: textBlueColor,
-                    //             fontWeight: FontWeight.bold,
-                    //           ),
-                    //         ),
-                    //         Text(
-                    //           snapshot.data!.jamPulang ?? "-",
-                    //           style: poppins.copyWith(
-                    //             fontSize: 14.sp,
-                    //             color: textBlueColor,
-                    //           ),
-                    //         ),
-                    //         Text(
-                    //           snapshot.data!.status ?? "-",
-                    //           style: poppins.copyWith(
-                    //             fontSize: 14.sp,
-                    //             color: textBlueColor,
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     );
-                    //   },
-                    // ),
                   ],
                 ),
               ),
@@ -688,71 +413,24 @@ class HomeView extends GetView<HomeController> {
                                 ),
                               ),
                               Text(
-                                masukC.mapFetchYesterday['jam_masuk'] ?? "-",
+                                controller.dataAbsenModel.value.absenbefore?[1]
+                                        .jamMasuk ??
+                                    "-",
                                 style: poppins.copyWith(
                                   fontSize: 14.sp,
                                   color: textBlueColor,
                                 ),
                               ),
-                              Text(
-                                masukC.mapFetchYesterday['status'] ?? "-",
-                                style: poppins.copyWith(
-                                  fontSize: 14.sp,
-                                  color: textBlueColor,
-                                ),
-                              ),
+                              // Text(
+                              //   masukC.mapFetchYesterday['status'] ?? "-",
+                              //   style: poppins.copyWith(
+                              //     fontSize: 14.sp,
+                              //     color: textBlueColor,
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),
-                        // FutureBuilder<Masuk>(
-                        //   future: masukC.getMasukYesterday(),
-                        //   builder: (context, snapshot) {
-                        //     if (snapshot.connectionState ==
-                        //         ConnectionState.waiting) {
-                        //       return const Center(
-                        //           child: CircularProgressIndicator());
-                        //     }
-
-                        //     if (!snapshot.hasData) {
-                        //       return Column(
-                        //         children: [
-                        //           const CircularProgressIndicator(),
-                        //           Text(
-                        //             "Coba Update Lagi",
-                        //             style: poppins.copyWith(fontSize: 8.sp),
-                        //           ),
-                        //         ],
-                        //       );
-                        //     }
-                        //     return Column(
-                        //       crossAxisAlignment: CrossAxisAlignment.start,
-                        //       children: [
-                        //         Text(
-                        //           "Absen Pagi",
-                        //           style: poppins.copyWith(
-                        //             fontSize: 14.sp,
-                        //             color: textBlueColor,
-                        //             fontWeight: FontWeight.bold,
-                        //           ),
-                        //         ),
-                        //         Text(
-                        //           snapshot.data!.jamMasuk ?? "-",
-                        //           style: poppins.copyWith(
-                        //             fontSize: 14.sp,
-                        //             color: textBlueColor,
-                        //           ),
-                        //         ),
-                        //         Text(
-                        //           snapshot.data!.status ?? "-",
-                        //           style: poppins.copyWith(
-                        //             fontSize: 14.sp,
-                        //             color: textBlueColor,
-                        //           ),
-                        //         ),
-                        //       ],
-                        //     );
-                        //   },
-                        // ),
                         Text(
                           controller.yesterday,
                           style: poppins.copyWith(
@@ -777,66 +455,24 @@ class HomeView extends GetView<HomeController> {
                             ),
                           ),
                           Text(
-                            siang1C.mapSiang1FetchYesterday['jam_siang'] ?? "-",
+                            controller.dataAbsenModel.value.absenbefore?[1]
+                                    .jamSiang ??
+                                "-",
                             style: poppins.copyWith(
                               fontSize: 14.sp,
                               color: textBlueColor,
                             ),
                           ),
-                          Text(
-                            siang1C.mapSiang1FetchYesterday['status'] ?? "-",
-                            style: poppins.copyWith(
-                              fontSize: 14.sp,
-                              color: textBlueColor,
-                            ),
-                          ),
+                          // Text(
+                          //   siang1C.mapSiang1FetchYesterday['status'] ?? "-",
+                          //   style: poppins.copyWith(
+                          //     fontSize: 14.sp,
+                          //     color: textBlueColor,
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
-                    // FutureBuilder<Siang1>(
-                    //   future: siang1C.getSiang1Yesterday(),
-                    //   builder: (context, snapshot) {
-                    //     if (snapshot.connectionState ==
-                    //         ConnectionState.waiting) {
-                    //       return const Center(
-                    //           child: CircularProgressIndicator());
-                    //     }
-                    //     if (!snapshot.hasData) {
-                    //       return const Center(
-                    //         child: CircularProgressIndicator(
-                    //           semanticsValue: "Coba Update Lagi",
-                    //         ),
-                    //       );
-                    //     }
-                    //     return Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       children: [
-                    //         Text(
-                    //           "Absen Siang 1",
-                    //           style: poppins.copyWith(
-                    //             fontSize: 14.sp,
-                    //             color: textBlueColor,
-                    //             fontWeight: FontWeight.bold,
-                    //           ),
-                    //         ),
-                    //         Text(
-                    //           snapshot.data!.jamSiang ?? "-",
-                    //           style: poppins.copyWith(
-                    //             fontSize: 14.sp,
-                    //             color: textBlueColor,
-                    //           ),
-                    //         ),
-                    //         Text(
-                    //           snapshot.data!.status ?? "-",
-                    //           style: poppins.copyWith(
-                    //             fontSize: 14.sp,
-                    //             color: textBlueColor,
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     );
-                    //   },
-                    // ),
                     SizedBox(height: 20.h),
                     Obx(() => Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -850,68 +486,23 @@ class HomeView extends GetView<HomeController> {
                               ),
                             ),
                             Text(
-                              siang2C.mapSiang2FetchYesterday['jam_siang2'] ??
+                              controller.dataAbsenModel.value.absenbefore?[1]
+                                      .jamSiang2 ??
                                   "-",
                               style: poppins.copyWith(
                                 fontSize: 14.sp,
                                 color: textBlueColor,
                               ),
                             ),
-                            Text(
-                              siang2C.mapSiang2FetchYesterday['status'] ?? "-",
-                              style: poppins.copyWith(
-                                fontSize: 14.sp,
-                                color: textBlueColor,
-                              ),
-                            ),
+                            // Text(
+                            //   siang2C.mapSiang2FetchYesterday['status'] ?? "-",
+                            //   style: poppins.copyWith(
+                            //     fontSize: 14.sp,
+                            //     color: textBlueColor,
+                            //   ),
+                            // ),
                           ],
                         )),
-
-                    // FutureBuilder<Siang2>(
-                    //   future: siang2C.getSiang2Yesterday(),
-                    //   builder: (context, snapshot) {
-                    //     if (snapshot.connectionState ==
-                    //         ConnectionState.waiting) {
-                    //       return const Center(
-                    //           child: CircularProgressIndicator());
-                    //     }
-
-                    //     if (!snapshot.hasData) {
-                    //       return const Center(
-                    //         child: CircularProgressIndicator(
-                    //           semanticsValue: "Coba Update Lagi",
-                    //         ),
-                    //       );
-                    //     }
-                    //     return Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       children: [
-                    //         Text(
-                    //           "Absen Siang 2",
-                    //           style: poppins.copyWith(
-                    //             fontSize: 14.sp,
-                    //             color: textBlueColor,
-                    //             fontWeight: FontWeight.bold,
-                    //           ),
-                    //         ),
-                    //         Text(
-                    //           snapshot.data!.jamSiang2 ?? "-",
-                    //           style: poppins.copyWith(
-                    //             fontSize: 14.sp,
-                    //             color: textBlueColor,
-                    //           ),
-                    //         ),
-                    //         Text(
-                    //           snapshot.data!.status ?? "-",
-                    //           style: poppins.copyWith(
-                    //             fontSize: 14.sp,
-                    //             color: textBlueColor,
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     );
-                    //   },
-                    // ),
                     SizedBox(height: 20.h),
                     Obx(
                       () => Column(
@@ -926,68 +517,24 @@ class HomeView extends GetView<HomeController> {
                             ),
                           ),
                           Text(
-                            pulangC.mapPulangFetchYesterday['jam_pulang'] ??
+                            controller.dataAbsenModel.value.absenbefore?[1]
+                                    .jamPulang ??
                                 "-",
                             style: poppins.copyWith(
                               fontSize: 14.sp,
                               color: textBlueColor,
                             ),
                           ),
-                          Text(
-                            pulangC.mapPulangFetchYesterday['status'] ?? "-",
-                            style: poppins.copyWith(
-                              fontSize: 14.sp,
-                              color: textBlueColor,
-                            ),
-                          ),
+                          // Text(
+                          //   pulangC.mapPulangFetchYesterday['status'] ?? "-",
+                          //   style: poppins.copyWith(
+                          //     fontSize: 14.sp,
+                          //     color: textBlueColor,
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
-                    // FutureBuilder<Pulang>(
-                    //   future: pulangC.getPulangYesterday(),
-                    //   builder: (context, snapshot) {
-                    //     if (snapshot.connectionState ==
-                    //         ConnectionState.waiting) {
-                    //       return const Center(
-                    //           child: CircularProgressIndicator());
-                    //     }
-
-                    //     if (!snapshot.hasData) {
-                    //       return const Center(
-                    //         child: CircularProgressIndicator(
-                    //           semanticsValue: "Coba Update Lagi",
-                    //         ),
-                    //       );
-                    //     }
-                    //     return Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       children: [
-                    //         Text(
-                    //           "Absen Pulang",
-                    //           style: poppins.copyWith(
-                    //             fontSize: 14.sp,
-                    //             color: textBlueColor,
-                    //             fontWeight: FontWeight.bold,
-                    //           ),
-                    //         ),
-                    //         Text(
-                    //           snapshot.data!.jamPulang ?? "-",
-                    //           style: poppins.copyWith(
-                    //             fontSize: 14.sp,
-                    //             color: textBlueColor,
-                    //           ),
-                    //         ),
-                    //         Text(
-                    //           snapshot.data!.status ?? "-",
-                    //           style: poppins.copyWith(
-                    //             fontSize: 14.sp,
-                    //             color: textBlueColor,
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     );
-                    //   },
-                    // ),
                   ],
                 ),
               ),

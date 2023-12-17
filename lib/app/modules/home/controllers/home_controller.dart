@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:absensi_bapenda/app/data/models/data_absen_model.dart';
 import 'package:absensi_bapenda/app/data/models/masuk_model.dart';
 import 'package:absensi_bapenda/app/data/models/user_model.dart';
 import 'package:absensi_bapenda/app/routes/app_pages.dart';
@@ -22,8 +23,10 @@ class HomeController extends GetxController {
 
   RxList<Masuk> listMasuk = <Masuk>[].obs;
   Rx<Masuk> todayMasuk = Masuk().obs;
+  Rx<DataAbsenModel> dataAbsenModel = DataAbsenModel().obs;
 
   Dio dio = Dio();
+  CancelToken getAbsenCancelToken = CancelToken();
 
   // ${"ANDRIAN WAHYU".split(' ').join('+')}
   RxString defaultImage =
@@ -58,6 +61,7 @@ class HomeController extends GetxController {
 
     if (user != null) {
       mapUser = jsonDecode(user);
+      // debugPrint(mapUser.toString());
 
       return user;
     } else {
@@ -97,6 +101,53 @@ class HomeController extends GetxController {
     return now.weekday == DateTime.saturday || now.weekday == DateTime.sunday;
   }
 
+  Future<DataAbsenModel> getAbsen(String idPegawai) async {
+    try {
+      String endpoint = "$baseUrlAPI/v1/getabsen/$idPegawai";
+      // debugPrint("endpoint: $endpoint");
+      final response = await dio.get(
+        endpoint,
+        cancelToken: getAbsenCancelToken,
+        options: Options(
+          headers: <String, String>{
+            "Authorization": "Basic QWJzZW5iYXBlbmRhOmIyQFlAM1NhTiE=",
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        var data = response.data;
+        if (data != null) {
+          return DataAbsenModel.fromJson(data);
+        } else {
+          return DataAbsenModel();
+        }
+      } else if (response.statusCode == 401) {
+        Get.snackbar("Gagal", "Terjadi kesalahan");
+        return DataAbsenModel();
+      } else {
+        Get.snackbar("Gagal", "Server Error");
+        return DataAbsenModel();
+      }
+    } on DioError catch (e) {
+      debugPrint(e.toString());
+      if (e.response!.statusCode == 404) {
+        debugPrint("Data Belum Ada");
+      } else if (e.response!.statusCode == 500) {
+        debugPrint("Server Error");
+      } else if (e.response!.statusCode == 429) {
+        debugPrint("Terlalu Banyak Request getMasukwithUserId");
+      }
+
+      return DataAbsenModel();
+    } catch (e) {
+      debugPrint(e.toString());
+      return DataAbsenModel();
+    }
+  }
+
   @override
   void onInit() async {
     if (await checkSharedPreference() == "") {
@@ -105,6 +156,8 @@ class HomeController extends GetxController {
     } else {
       mapUser = await getUser();
       userModel.value = await getUserModel();
+
+      dataAbsenModel.value = await getAbsen(mapUser['data']['id'].toString());
 
       // debugPrint(userModel.value.toJson().toString());
 
