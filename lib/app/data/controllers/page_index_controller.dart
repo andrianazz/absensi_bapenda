@@ -1,12 +1,3 @@
-import 'package:absensi_bapenda/app/data/controllers/absensi_controller.dart';
-import 'package:absensi_bapenda/app/data/controllers/masuk_controller.dart';
-import 'package:absensi_bapenda/app/data/controllers/pulang_controller.dart';
-import 'package:absensi_bapenda/app/data/controllers/siang1_controller.dart';
-import 'package:absensi_bapenda/app/data/controllers/siang2_controller.dart';
-import 'package:absensi_bapenda/app/data/models/masuk_model.dart';
-import 'package:absensi_bapenda/app/data/models/pulang_model.dart';
-import 'package:absensi_bapenda/app/data/models/siang1_model.dart';
-import 'package:absensi_bapenda/app/data/models/siang2_model.dart';
 import 'package:absensi_bapenda/app/modules/home/controllers/home_controller.dart';
 import 'package:absensi_bapenda/theme/color.dart';
 import 'package:absensi_bapenda/theme/style.dart';
@@ -262,6 +253,7 @@ class PageIndexController extends GetxController {
                 ),
                 TextButton(
                   onPressed: () async {
+                    statusLoading.value = "Memproses ke server";
                     voidDialogLoading();
 
                     var result = await presence2(position);

@@ -4,7 +4,6 @@ import 'package:absensi_bapenda/theme/style.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:get/get.dart';
 
