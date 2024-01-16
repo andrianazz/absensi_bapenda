@@ -103,7 +103,7 @@ class ProfileView extends GetView<ProfileController> {
                   onTap: () async {
                     // launchUrl(Uri.parse("http://github.com/andrianazz"));
                     // Logout
-                    await controller.logout();
+                    // await controller.logout();
                   },
                   child: Text(
                     "Versi 1.0.0",
