@@ -51,8 +51,7 @@ class ProfileView extends GetView<ProfileController> {
                 () => Column(
                   children: [
                     Text(
-                      homeC.userModel.value.nama?.toUpperCase() ??
-                          "Tidak ada Nama",
+                      homeC.userModel.value.nama?.toUpperCase() ?? "Tidak ada Nama",
                       style: poppins.copyWith(
                         fontSize: 24.sp,
                         fontWeight: FontWeight.w700,
@@ -61,8 +60,7 @@ class ProfileView extends GetView<ProfileController> {
                     GestureDetector(
                       onTap: () async {},
                       child: Text(
-                        homeC.userModel.value.unitKerja?.namaUnitKerja! ??
-                            "Tidak ada Unit Kerja",
+                        homeC.userModel.value.unitKerja?.namaUnitKerja! ?? "Tidak ada Unit Kerja",
                         style: poppins.copyWith(
                           fontSize: 20.sp,
                           fontWeight: FontWeight.w500,
@@ -106,7 +104,7 @@ class ProfileView extends GetView<ProfileController> {
                     // await controller.logout();
                   },
                   child: Text(
-                    "Versi 1.0.0",
+                    "Versi 1.1.0",
                     style: poppins.copyWith(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
